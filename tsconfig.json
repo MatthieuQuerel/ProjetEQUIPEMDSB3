@@ -1,6 +1,9 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "jsx": "react-native",  // Assurez-vous que cette ligne est présente
+    "esModuleInterop": true, // Assurez-vous que cette ligne est présente
+    "skipLibCheck": true     // Cette option peut être ajoutée pour éviter la vérification des fichiers de définition des bibliothèques externes
   }
 }

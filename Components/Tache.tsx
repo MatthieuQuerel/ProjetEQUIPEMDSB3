@@ -3,20 +3,20 @@ import { View, Text, TouchableOpacity,StyleSheet} from 'react-native';
 
 
 import { Link } from 'react-router-native';
-interface CompteEnfantState {
+interface CompteTache {
  
 }
 interface IProps {
 }
 
-const CompteEnfant: React.FC<IProps> = () => {
+const Tache: React.FC<IProps> = () => {
    
         return(
 
             <View style={styles.container}>
          
       
-            <Text style={styles.appName}>Compte Enfant</Text>
+            <Text style={styles.appName}>Tache</Text>
 
             
           </View>
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
     },
    
   });
-export default CompteEnfant ;
+export default Tache ;
