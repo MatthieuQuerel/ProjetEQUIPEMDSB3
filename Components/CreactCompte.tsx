@@ -50,7 +50,7 @@ ChampsRemplie = async () => {
 
       };
 
-      const response = await fetch('http://10.127.90.47:8082/CreactCompte', options);//10.0.2.2
+      const response = await fetch('http://10.54.90.253:8082/CreactCompte', options);//10.0.2.2
      
       // const responseData = await response.text();
       // console.log('Server Response:', responseData);

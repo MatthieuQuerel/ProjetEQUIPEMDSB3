@@ -17,7 +17,9 @@ const BarHead: React.FC<BarHeadProps> = () => {
 
   return (
     <View style={styles.container}>
-      
+      <Image  source={require('../../assets/Logo.png')} 
+        style={styles.logo}
+      />
       <TouchableOpacity style={styles.button} onPress={handleNotificationPress}>
         <Text style={styles.buttonText}>Notification ({notifications})</Text>
       </TouchableOpacity>
@@ -30,14 +32,14 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     justifyContent: 'space-between',
-    //alignItems: 'center',
+    alignItems: 'center',
     padding: 5,
     width: 400, 
-    backgroundColor: '#3498db', // Couleur de fond de la barre
+    backgroundColor: 'white', // Couleur de fond de la barre
   },
   logo: {
-    width: 60, // Ajustez la largeur de l'image selon vos besoins
-    height: 150, // Ajustez la hauteur de l'image selon vos besoins
+    width: 150, // Ajustez la largeur de l'image selon vos besoins
+    height: 100, // Ajustez la hauteur de l'image selon vos besoins
   },
   button: {
     backgroundColor: '#2ecc71', // Couleur de fond du bouton

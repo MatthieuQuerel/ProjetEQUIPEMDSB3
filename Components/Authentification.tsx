@@ -39,7 +39,7 @@ const Authentification: React.FC<IProps> = () => {
           }),
         };
 
-        const response = await fetch('http://172.20.10.2:8082/Authentification', options);
+        const response = await fetch('http://10.54.90.253:8082/Authentification', options);
 
         if (response.ok) {
           const responseData = await response.json();

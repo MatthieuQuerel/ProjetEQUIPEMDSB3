@@ -14,7 +14,11 @@ const Tache: React.FC<IProps> = () => {
         return(
 
             <View style={styles.container}>
-         
+         <TouchableOpacity  onPress={() => console.log("Créer compte")}>
+          <Link to='/Compte/CompteParent'>
+            <Text>Retour</Text>
+          </Link>
+        </TouchableOpacity>
       
             <Text style={styles.appName}>Tache</Text>
 
