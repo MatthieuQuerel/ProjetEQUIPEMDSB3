@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ButtonNav from "./Composents_Reutilisable/Button";
 import BarHead from "./Composents_Reutilisable/BarHead";
-
+import NavBar from "./Composents_Reutilisable/Nav"
 interface CompteParentState {
   
 }
@@ -18,6 +18,8 @@ const CompteParent: React.FC<IProps> = () => {
       <ButtonNav name="TACHE" chemin="/Compte/CompteParent/Tache" />
       <ButtonNav name="BOUTIQUE" chemin="/Compte/CompteParent" />
       <ButtonNav name="STATES" chemin="/Compte/CompteParent" />
+
+      <NavBar />
     </View>
   );
 };
