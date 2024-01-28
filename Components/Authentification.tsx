@@ -39,14 +39,14 @@ const Authentification: React.FC<IProps> = () => {
           }),
         };
 
-        const response = await fetch('http://10.54.90.253:8082/Authentification', options);
+        const response = await fetch('http://192.168.1.116:8082/Authentification', options);
 
         if (response.ok) {
           const responseData = await response.json();
           if(responseData !=""){
             console.log('Réponse du serveur:', responseData);
             console.log('Réponse du serveur:', responseData.Mail);
-            navigate('/Compte');
+            navigate(`/Compte/${email}`);
           }else{
             console.log('Réponse du serveur NULLLLL:', responseData);
           }

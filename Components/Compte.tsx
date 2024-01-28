@@ -1,26 +1,29 @@
-
-
 import { View, Text, TouchableOpacity,StyleSheet} from 'react-native';
 import ButtonNav from "./Composents_Reutilisable/Button"
-
+import { useParams } from 'react-router-native';
 import { Link } from 'react-router-native';
 interface CompteState {
-  
-}
-interface IProps {
+  //email: string;
 }
 
-const Compte: React.FC<IProps> = () => {
- 
+const Compte: React.FC<CompteState> = () => {
+  //const { User } = useParams<RouteParams>();
+  const params = useParams(); // récupérer le parametre email
+  console.log(params.User);
         return(
 
             <View style={styles.container}>
          
+         <TouchableOpacity onPress={() => console.log(` clicked`)}>
+    <Link to={`/Compte/${params.User}/CompteParent`}>
+      <Text >tet</Text>
+    </Link>
+  </TouchableOpacity>
+
       
             <Text style={styles.appName}>......//////</Text>
-
-            <ButtonNav name="Parent" chemin="/Compte/CompteParent" /> 
-             <ButtonNav name="Enfant" chemin="/Compte/CompteEnfant" />
+            <ButtonNav name="Parent" chemin={`/Compte/${params.User}/CompteParent`} /> 
+            <ButtonNav name="Enfant" chemin={`/Compte/${params.User}/CompteEnfant`} />
             
           </View>
 

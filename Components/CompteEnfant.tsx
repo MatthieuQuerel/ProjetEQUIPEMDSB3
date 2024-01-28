@@ -4,12 +4,10 @@ import { View, Text, TouchableOpacity,StyleSheet} from 'react-native';
 
 import { Link } from 'react-router-native';
 interface CompteEnfantState {
- 
-}
-interface IProps {
+  // email: string;
 }
 
-const CompteEnfant: React.FC<IProps> = () => {
+const CompteEnfant: React.FC<CompteEnfantState> = () => {
    
         return(
 

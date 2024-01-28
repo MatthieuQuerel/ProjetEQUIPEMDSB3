@@ -99,6 +99,15 @@ app.post("/Authentification", async (req, res) => {
     }
   });
   
+  /////////////////////////////////////Récupération Tache////////////////////////////////
+// app.get()
+
+
+
+
+  /////////////////////////////////////Ajouter Tache    ///////////////////////////////
+
+
 
 app.listen(port, () => {
     console.log('Le serveur est en cours d\'exécution sur http://192.168.1.116:'+port);

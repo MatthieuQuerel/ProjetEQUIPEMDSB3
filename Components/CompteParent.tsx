@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ButtonNav from "./Composents_Reutilisable/Button";
+import { useParams } from 'react-router-native';
 import BarHead from "./Composents_Reutilisable/BarHead";
 import NavBar from "./Composents_Reutilisable/Nav"
 interface CompteParentState {
-  
+  // email: string;
 }
 
-interface IProps {}
-
-const CompteParent: React.FC<IProps> = () => {
-
+const CompteParent: React.FC<CompteParentState> = () => {
+  const params = useParams();
+  console.log(params.User);
   return (
     <View style={styles.container}>
       <BarHead  />
       <Text style={styles.appName}>Compte Parent</Text>
-      <ButtonNav name="TACHE" chemin="/Compte/CompteParent/Tache" />
-      <ButtonNav name="BOUTIQUE" chemin="/Compte/CompteParent" />
-      <ButtonNav name="STATES" chemin="/Compte/CompteParent" />
+      <ButtonNav name="TACHE" chemin={`/Compte/${params.User}/CompteParent/Tache`} />
+      <ButtonNav name="BOUTIQUE" chemin={`/Compte/${params.User}/CompteParent`} />
+      <ButtonNav name="STATES" chemin={`/Compte/${params.User}/CompteParent`}/>
 
       <NavBar />
     </View>

@@ -8,11 +8,13 @@ interface ButtonNav {
 }
 
 const ButtonNav: React.FC<ButtonNav> = ({ name, chemin }) => (
+ 
   <TouchableOpacity style={styles.button} onPress={() => console.log(`${name} clicked`)}>
     <Link to={chemin}>
       <Text style={styles.buttonText}>{name}</Text>
     </Link>
   </TouchableOpacity>
+  
 );
 
 const styles = StyleSheet.create({
