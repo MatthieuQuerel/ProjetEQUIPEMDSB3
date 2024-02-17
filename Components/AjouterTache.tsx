@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import ButtonNav from "./Composents_Reutilisable/Button";
 import OngletAjouterTache from "./Composents_Reutilisable/OngletAjouterTache";
 import { useParams } from 'react-router-native';
+import { Link } from 'react-router-native';
 // Définition du type pour les propriétés du composant
 type AjouterTacheProps = {
   // email: string;
@@ -17,11 +18,19 @@ const AjouterTache: React.FC<AjouterTacheProps> = () => {
     setActiveTab(tabNumber);
   };
   const params = useParams();
+
+
   return (
     <View>
-     
-          <Text>Ajouter tache</Text>
-        <OngletAjouterTache />
+     <TouchableOpacity  onPress={() => console.log("Créer compte")}>
+          <Link to={`/Compte/${params.User}/CompteParent/Tache`}>
+            <Text>Retour</Text>
+          </Link>
+        </TouchableOpacity>
+
+          <Text>Ajouter une tâche</Text>
+
+        <OngletAjouterTache user= {params.User} />
       </View>
 
       

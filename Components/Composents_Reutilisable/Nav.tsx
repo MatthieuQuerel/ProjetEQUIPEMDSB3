@@ -18,7 +18,7 @@ const NavBar: React.FC<IProps> = () => {
 
       <TouchableOpacity onPress={() => console.log("Compte Parent")}>
         <Link to={`/Compte/${params.User}/CompteParent`}>
-          <Text style={styles.buttonText}>Compte Parent</Text>
+          <Text style={styles.buttonText}>Accueil</Text>
         </Link>
       </TouchableOpacity>
 
@@ -26,6 +26,18 @@ const NavBar: React.FC<IProps> = () => {
       <TouchableOpacity  onPress={() => console.log("Tache")}>
         <Link to={`/Compte/${params.User}/CompteParent/Tache`}>
           <Text style={styles.buttonText}>Tache</Text>
+        </Link>
+      </TouchableOpacity>
+
+      <TouchableOpacity  onPress={() => console.log("Profils")}>
+        <Link to={`/Compte/${params.User}/CompteParent/Profils`}>
+          <Text style={styles.buttonText}>Profils</Text>
+        </Link>
+      </TouchableOpacity>
+      
+      <TouchableOpacity  onPress={() => console.log("Prenium")}>
+        <Link to={`/Compte/${params.User}/CompteParent/Prenium`}>
+          <Text style={styles.buttonText}>Prenium</Text>
         </Link>
       </TouchableOpacity>
     </View>
@@ -47,10 +59,10 @@ const styles = StyleSheet.create({
   buttonText: {
     backgroundColor: '#007BFF',
     color: 'white',
-    paddingTop: 13,
-    width: 120,
+    paddingTop: 15,
+    width: 105,
     height: 50,
-    fontSize: 16,
+    fontSize: 15,
     textAlign: 'center',
    
   },

@@ -9,7 +9,7 @@ interface CompteParentState {
 
 const CompteParent: React.FC<CompteParentState> = () => {
   const params = useParams();
-  console.log(params.User);
+ 
   return (
     <View style={styles.container}>
       <BarHead  />

@@ -9,16 +9,11 @@ interface CompteState {
 const Compte: React.FC<CompteState> = () => {
   //const { User } = useParams<RouteParams>();
   const params = useParams(); // récupérer le parametre email
-  console.log(params.User);
+  
         return(
 
             <View style={styles.container}>
          
-         <TouchableOpacity onPress={() => console.log(` clicked`)}>
-    <Link to={`/Compte/${params.User}/CompteParent`}>
-      <Text >tet</Text>
-    </Link>
-  </TouchableOpacity>
 
       
             <Text style={styles.appName}>......//////</Text>

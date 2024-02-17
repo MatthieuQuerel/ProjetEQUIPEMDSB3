@@ -18,7 +18,7 @@ const Tache: React.FC<CompteTache> = () => {
             <View style={styles.container}>
               <BarHead  />
          <TouchableOpacity  onPress={() => console.log("Créer compte")}>
-          <Link to={`/Compte/${params.User}/CompteParent/Tache`}>
+          <Link to={`/Compte/${params.User}/CompteParent`}>
             <Text>Retour</Text>
           </Link>
         </TouchableOpacity>
