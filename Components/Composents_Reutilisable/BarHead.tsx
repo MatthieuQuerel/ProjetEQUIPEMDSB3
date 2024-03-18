@@ -35,19 +35,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
     width: 400, 
-    backgroundColor: 'white', // Couleur de fond de la barre
+    backgroundColor: 'white', 
   },
   logo: {
-    width: 150, // Ajustez la largeur de l'image selon vos besoins
-    height: 100, // Ajustez la hauteur de l'image selon vos besoins
+    width: 250, 
+    height: 80, 
   },
   button: {
-    backgroundColor: '#2ecc71', // Couleur de fond du bouton
+    backgroundColor: '#2ecc71',
     padding: 10,
     borderRadius: 5,
   },
   buttonText: {
-    color: 'white', // Couleur du texte du bouton
+    color: 'white', 
     fontSize: 16,
     fontWeight: 'bold',
   },

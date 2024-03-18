@@ -31,7 +31,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
   const [selectedNameValue, setSelectedNameValue] = useState<string>('');
   const [state, setState] = useState<OngletAjouterTacheState>({
     NomTache: '',
-    point: '', // Utilisation d'une chaîne de caractères pour le champ numérique
+    point: 0, // Utilisation d'une chaîne de caractères pour le champ numérique
     Penalitee: '', // Utilisation d'une chaîne de caractères pour la pénalité
     Description: '',
     NameEnfant: '', // Nom de l'enfant sélectionné
@@ -96,7 +96,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
       state.Penalitee !== '' &&
       state.Description !== '' &&
       state.NameEnfant !== '' &&
-      state.Recurence !== ''
+      state.Recurence !== 0
       // selectedValue !== '' &&
       // selectedNameValue !== ''
     ) {
@@ -136,7 +136,7 @@ const responseData = await response.json();
           state.Penalitee=''
           state.NameEnfant=''
           state.Description=''
-          state.Recurence=''
+          state.Recurence=0
         }
       } catch (error) {
         console.error('Erreur requete :', error);
@@ -176,7 +176,7 @@ const responseData = await response.json();
   style={styles.input}
   placeholder="Point"
   keyboardType="numeric"
-  value={state.point}
+  value={state.point.toString()}
   onChangeText={text => handleChange('point', text)}
 />
 
@@ -238,7 +238,7 @@ const responseData = await response.json();
   style={styles.input}
   placeholder="Point"
   keyboardType="numeric"
-  value={state.point}
+  value={state.point.toString()}
   onChangeText={text => handleChange('point', text)}
 />
 

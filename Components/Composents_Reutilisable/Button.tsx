@@ -22,15 +22,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     height: 80,
-    backgroundColor: 'green',
+    backgroundColor: 'black', 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    borderWidth: 1, 
+    borderColor: 'orange', 
   },
   buttonText: {
-    fontSize: 20,
-   
-    color: 'blue',
+    fontSize: 24, 
+    color: 'orange',
   },
 });
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link, useNavigate } from 'react-router-native';
 
+
 interface AuthentificationState {
   email: string;
   password: string;
@@ -10,6 +11,7 @@ interface AuthentificationState {
 interface IProps {}
 
 const Authentification: React.FC<IProps> = () => {
+ // const toast = useToast();
   const [state, setState] = useState<AuthentificationState>({
     email: '',
     password: '',
@@ -27,6 +29,11 @@ const Authentification: React.FC<IProps> = () => {
     const { email, password } = state;
 
     if (email === '' || password === '') {
+      
+      // toast.show({
+      //   type: 'error',
+      //   text1: 'Il manque des infos ', // Le message à afficher
+      // });
       alert('Il manque des infos');
     } else {
       try {
@@ -48,9 +55,18 @@ const Authentification: React.FC<IProps> = () => {
           if(responseData !=""){
             console.log('Réponse du serveur:', responseData);
             console.log('Réponse du serveur:', responseData.Mail);
+            // toast.show({
+            //   type: 'success',
+            //   text1: "Authentification Réussi", // Le message à afficher
+            // });
             navigate(`/Compte/${email}`);
           }else{
             console.log('Réponse du serveur NULLLLL:', responseData);
+            // toast.show({
+            //   type: 'error',
+            //   text1: responseData?.error?.message, // Le message à afficher
+            // });
+          
           }
          
         } else {
@@ -64,12 +80,13 @@ const Authentification: React.FC<IProps> = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Authentification</Text>
+      <Text style={styles.title}>Connexion au compte</Text>
       <TextInput
         style={styles.input}
         value={state.email}
         onChangeText={(text) => handleChange('email', text)}
         placeholder="email"
+        placeholderTextColor="#F4B322"
         keyboardType="email-address"
       />
       <TextInput
@@ -77,46 +94,82 @@ const Authentification: React.FC<IProps> = () => {
         value={state.password}
         onChangeText={(text) => handleChange('password', text)}
         placeholder="Password"
+        placeholderTextColor="#F4B322"
         secureTextEntry
       />
 
-      <Button title="Login" onPress={ChampsRemplie}  />
-
-      <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
-        <Link to="/CreactCompte">
-          <Text style={styles.createAccountText}>Créer Compte</Text>
-        </Link>
+<TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
+        <Text style={styles.ButtonText}>Connexion</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
+  <Text style={styles.text}>Vous n’avez pas de compte ? </Text>
+  <Link to="/CreactCompte">
+    <Text style={[styles.createAccountText, { color: 'orange' }]}>S'inscrire !</Text>
+  </Link>
+</TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'center',
-    alignItems: 'center',
+     alignItems: 'center',   
     padding: 16,
   },
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 20,
+    color: '#FAFAFA',
+    width: 168,
+    height: 40,
+    top: 3,
+    left: 1,
+    fontFamily: 'sans-serif',
+    lineHeight: 20,
+    letterSpacing: 0,
+    textAlign: 'left', 
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#F4B322',
+    color: '#F4B322',
     borderWidth: 1,
+    borderRadius: 8, 
     marginBottom: 16,
     padding: 8,
     width: '100%',
+     
+  },
+  Button: {
+   
+    marginTop: 16,
+    backgroundColor: 'black', 
+    borderRadius: 8, 
+    paddingVertical: 8, 
+    paddingHorizontal: 10, 
+    alignItems: 'center', 
+    borderColor: 'white',
+    borderWidth: 1, 
+  },
+  
+  ButtonText: {
+    color: 'orange', 
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   createAccountButton: {
     marginTop: 16,
+    flexDirection: 'row', 
+    alignItems: 'center', 
+  },
+  text: {
+    color: 'white', 
   },
   createAccountText: {
-    color: 'blue',
-    backgroundColor: 'white',
+    marginLeft: 5, 
   },
 });
 

@@ -1,12 +1,16 @@
 const express = require('express');
 const mysql = require('mysql');
 const app = express();
-const cors = require('cors');
+const bodyParser = require('body-parser');
 const port = 8082;
 
+const stripe = require('stripe')('sk_test_51OQ4atDvUzqU5phQNI86jWKdxTAoXeaUeb7gpO5LyDxGF86JtpToYxON07CCP71qlP5wCcHohWnE36MhoBD8KZtL00j2wUiGl6');
+
 app.use(express.json());
-const Stripe = require('stripe');
-const stripe = Stripe(process.env.STRIPE_API_SECRET);
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+
 
 async function conection (){
     try {
@@ -60,7 +64,7 @@ app.post('/CreactCompte', async (req, res) => {
     }
   
     const queryGet = `SELECT Mail,Password FROM user WHERE Mail = '${formData.Mail}' and Password = '${formData.Password}'`;
-    const queryPoste = `INSERT INTO user (name,Lastname,Mail,Password) VALUES ('${formData.name}','${formData.Lastname}','${formData.Mail}','${formData.Password}')`;
+    const queryPoste = `INSERT INTO user (name,Lastname,Mail,Password) VALUES ('${formData.name}','${formData.LastName}','${formData.Mail}','${formData.Password}')`;
     
     try {
       const data = await executerequete(connection, queryGet);
@@ -135,10 +139,10 @@ app.post("/Authentification", async (req, res) => {
   /////////////////////////////////////Ajouter Tache ///////////////////////////////
 /////////////a revoire
 app.post("/TacheAjoue", async (req, res) => {
-  console.log("trouver")
+  
   const connection = await conection(); // Utilisez la fonction conection définie
   const formData = req.body;
-  console.log("dans la partie back")
+
   console.log(formData.IDPlayer)
   const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${formData.IDPlayer}'`;
 console.log(queryIdUser)
@@ -148,11 +152,10 @@ console.log(queryIdUser)
     console.log(dataIdUser)
     // Vérifiez si des données ont été récupérées
     if (dataIdUser.length > 0) {
-      console.log("req good")
+ 
       // Récupération de l'ID de l'utilisateur
       const idUsers = dataIdUser[0].IdUser;
-      
-      console.log("avant exe")
+   
       // Construction de la requête SQL avec l'ID de l'utilisateur récupéré
       const query = `INSERT IGNORE INTO rulse (Rulse, Penalite, Nombre_de_point, Description, type, idUser, idPlayer, Valider) VALUES ('${formData.NomTache}', '${formData.Penalitee}', '${formData.point}', '${formData.Description}', '${formData.Recurence}', '${idUsers}', '${formData.IDPlayer}', '0')`;
       console.log(query + "dhyufgrygfuyerfgyuregfyerf")
@@ -257,10 +260,10 @@ GROUP BY player.Point, player.Name;`
   /////////////////////////////////Modifier profil parent //////////////////////////////////////////////////////////////////
 
 app.put("/Profils/:mail/Modification", async (req, res) => {
-  console.log("1")
+
   const connection = await conection(); // Utilisez la fonction conection au lieu de conection
   const Mail = req.params.mail;
-  console.log("2")
+  
   const { name, lastname, mail, password } = req.body; // Assurez-vous d'avoir les nouveaux détails à mettre à jour
   console.log(name)
   console.log(lastname)
@@ -280,9 +283,8 @@ app.put("/Profils/:mail/Modification", async (req, res) => {
   console.log(query); // Pour vérifier que la requête est correcte dans la console du serveur
 
   try {
-    console.log("3")
+ 
       await executerequete(connection, query);
-      console.log("4")
       return res.json({ message: "Mise à jour réussie" });
   } catch (error) {
       console.log("Requête impossible", error);
@@ -290,53 +292,213 @@ app.put("/Profils/:mail/Modification", async (req, res) => {
   }
 });
 
+////////////////////////////////////// abonement preniume /////////////////////////////////////////////////////
 
+app.get("/AbonnerPrenium/:mail", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+  console.log(Mail)
+  const query = `SELECT Abonner FROM user WHERE Mail = '${Mail}'`
+const queryRecompense = `SELECT player.Name,Recompense.Point,RecompenseAdmin.RecompenseAdmin,RecompenseAdmin.description FROM Recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  INNER JOIN RecompenseAdmin ON RecompenseAdmin.idRecompenseAdmin =Recompense.idRecompense  WHERE user.Mail = '${Mail}' AND Abonnement = '1'`
 
+  try {
+    const data = await executerequete(connection, query);
+    const abonnement = data.map((Abonement) => ({
+      Abonner: Abonement.Abonner,
+    }));
+    console.log(abonnement[0].Abonner + " test Preniume ")
+    if (abonnement[0].Abonner === 0) {
+      
+      return res.json(abonnement);
+      
+  } else {
+    console.log( " pas la ")
+      const data = await executerequete(connection, queryRecompense);
+      const RecompensePrenium = data.map((recompensePrenium) => ({
+          Name: recompensePrenium.Name,
+          Point: recompensePrenium.Point,
+          RecompenseAdmin: recompensePrenium.RecompenseAdmin,
+          Description: recompensePrenium.description,
+      }));
+      return res.json(RecompensePrenium);
+  }
+
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+/////////////////////////////////////////abonement standard//////////////////////////////////////////
+app.get("/AbonnerStandard/:mail", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+  
+  const query = `SELECT player.Name,Recompense.Point,Recompense.Description,Recompense.Recompense FROM Recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  WHERE user.Mail = '${Mail}' AND Abonnement = '0'`
+
+  try {
+    const data = await executerequete(connection, query);
+    const RecompenseStandard = data.map((recompenseStandard) => ({
+      Name: recompenseStandard.Name,
+      Point: recompenseStandard.Point,
+      Description: recompenseStandard.Description,
+      Recompense: recompenseStandard.Recompense,
+      
+      
+    }));
+  
+       return res.json(RecompenseStandard);
+    
+     
+
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+/////////////////////////////////////////récompense adrmin ////////////////////////////////////////
+app.get("/RecompenseAdmin", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+ 
+  
+  const queryRecompenseAdmin = `SELECT RecompenseAdmin,description FROM recompenseadmin WHERE Flag = '0';`
+
+  try {
+    const data = await executerequete(connection, queryRecompenseAdmin);
+    const RecompenseAdmin = data.map((Recompenseadmin) => ({
+      NameRecompenseAdmin: Recompenseadmin.RecompenseAdmin,
+      description: Recompenseadmin.description,
+    }));
+  
+       return res.json(RecompenseAdmin);
+    
+     
+
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+/////////////////////////////////////Ajouter récompense ////////////////////////////////////////////
+app.post("/AjoutRécompense/:mail", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+ const {PlayerID,UserID,Recompense,Abonement,RecompenseAdmin,Point, Description} = req.body;
+ const queryAbonement  = ""
+if (Abonement== 1){
+  queryAbonement = `INSERT IGNORE INTO Recompense (users, Players, Recompense, Abonement, RecompenseAdmin, Point, Description) VALUES ('${UserID}', '${PlayerID}', '${Recompense}', '${Abonement}', '${RecompenseAdmin}', '${Point}', '${Description}')`
+}else{
+  queryAbonement = `INSERT IGNORE INTO Recompense (users, Players, Recompense, Abonement, RecompenseAdmin, Point, Description) VALUES ('${UserID}', '${PlayerID}', '${Recompense}', '${Abonement}', '${RecompenseAdmin}', '${Point}', '${Description}')`
+}
+  try {
+    const data = await executerequete(connection, queryAbonement); 
+    console.log(data)
+    if(data !== undefined|| data !== null){
+      return res.status(200).json({message:"récompense ajouté"})
+    }else{
+      res.status(500).json({ error: 'récompense non ajouté' })
+    }
+      
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+////////////////////////////////////Modifier réccompense //////////////////////////////////////////
+app.put("/Profils/:mail/Modification", async (req, res) => {
+
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+  let {PlayerID,UserID,Recompense,Abonement,RecompenseAdmin,Point, Description} = req.body;
+ 
+  console.log(PlayerID)
+  console.log(UserID)
+  console.log(Recompense)
+  console.log(Abonement) 
+  console.log(RecompenseAdmin) 
+  console.log(Point) 
+  onsole.log(Description)
+  const query = `
+      UPDATE user 
+      SET 
+      Recompense.name = '${PlayerID}', 
+      Recompense.Lastname = '${UserID}', 
+      Recompense.Mail = '${Recompense}', 
+      Recompense.Password = '${Abonement}' 
+      Recompense.Password = '${RecompenseAdmin}' 
+      Recompense.Password = '${Point}' 
+      Recompense.Password = '${Description}'`;
+
+  console.log(query); // Pour vérifier que la requête est correcte dans la console du serveur
+
+  try {
+ 
+      await executerequete(connection, query);
+      return res.json({ message: "Mise à jour Recompense réussie" });
+  } catch (error) {
+      console.log("Requête impossible", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 /////////////////////////////////////coter strapie//////////////////////////////////////////////////
 
-module.exports = {
-  async createSession(ctx) {
-    // Logic to create a new payment session with Stripe
-    // Use ctx.request.body to get any necessary data from the client
 
-    // Example:
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'T-shirt',
-            },
-            unit_amount: 2000,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: 'https://example.com/success',
-      cancel_url: 'https://example.com/cancel',
+app.post('/Abonnement/:mail', async (req, res) => {
+  try {
+    const Mail = req.params.mail;
+    const { payment_method } = req.body;
+    const connection = await conection();
+    const query =`UPDATE user SET Abonner = 1 WHERE Mail = '${Mail}'`;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 12000,
+      currency: 'eur',
+      payment_method: payment_method,
+      confirm: true,
+      //
+
+      // **Add the automatic_payment_methods configuration here:**
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never',
+      },
     });
 
-    return session;
-  },
-
-  async confirmPayment(ctx) {
-    try {
-      const { paymentIntent } = ctx.request.body;
-      const payment = await stripe.paymentIntents.retrieve(paymentIntent);
-      // Effectuez les actions nécessaires en fonction du statut du paiement
-      return payment;
-    } catch (error) {
-      console.error('Erreur lors de la confirmation du paiement :', error);
-      throw error;
+    
+    console.log(paymentIntent.client_secret)
+    if(paymentIntent.client_secret !== undefined){
+      
+      const data = await executerequete(connection,query)
+      
+      res.status(200).json({ clientSecret: paymentIntent.client_secret });
+   
+    }else {
+      res.status(500).json({ error: 'Une erreur est survenue lors de l ajoue en basse' });
     }
+    
+  } catch (error) {
+    console.error("Error creating payment intent:", error);
+    res.status(500).json({ error: 'Une erreur est survenue lors de la création du paiement.' });
   }
-};
+});
+// app.post('/Abonnement/:mail', async (req, res) => {
+//   const mail = req.params.mail;
+//   const payload = req.body;
 
+//   try {
+//     const paymentData = {
+//       amount: payload.amount,
+//       currency: payload.currency,
+//       payment_method_types: payload.payment_method_types
+//     };
 
+//     const paymentIntent = await stripe.paymentIntents.create(paymentData);
+
+//     res.status(200).json({ clientSecret: paymentIntent.client_secret });
+//   } catch (error) {
+//     console.error('Error creating payment intent:', error);
+//     res.status(500).json({ error: 'Une erreur est survenue lors de la création du paiement.' });
+//   }
+// });
 
 
 app.listen(port, () => {

@@ -15,8 +15,8 @@ const CompteParent: React.FC<CompteParentState> = () => {
       <BarHead  />
       <Text style={styles.appName}>Compte Parent</Text>
       <ButtonNav name="TACHE" chemin={`/Compte/${params.User}/CompteParent/Tache`} />
-      <ButtonNav name="BOUTIQUE" chemin={`/Compte/${params.User}/CompteParent`} />
-      <ButtonNav name="STATES" chemin={`/Compte/${params.User}/CompteParent`}/>
+      <ButtonNav name="PROFIL" chemin={`/Compte/${params.User}/CompteParent/Profils`} />
+      <ButtonNav name="RECOMPENSE" chemin={`/Compte/${params.User}/CompteParent/Prenium`}/>
 
       <NavBar />
     </View>

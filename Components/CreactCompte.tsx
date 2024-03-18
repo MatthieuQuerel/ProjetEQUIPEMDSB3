@@ -1,147 +1,181 @@
-import {Component}  from 'react';
 
+import React, { useState } from 'react';
 import { Link } from 'react-router-native';
-import { TextInput, Button, Text, View ,TouchableOpacity,StyleSheet,Alert} from 'react-native';
+import { TextInput, Button, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 interface CreactCompteState {
   username: string;
   lastName: string;
   email: string;
-  password: string; 
-}
-interface IProps {
+  password: string;
 }
 
-class CreactCompte extends Component<IProps, CreactCompteState> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      username: '',
-      lastName: '',
-      email: '',
-      password: '',
-    };
-  }
-
-handleChange = (fieldName: keyof CreactCompteState, value: string) => {
-  this.setState((prevState) => ({ ...prevState, [fieldName]: value }));
-};
-
-ChampsRemplie = async () => {
-  const { username, lastName, email, password } = this.state;
-
-  if (username === "" || lastName === "" || email === "" || password === "") {
-    Alert.alert("Tous les champs ne sont pas remplis");
-  } else {
-    try {
-      const options = {
-        method: 'POST', // Méthode HTTP
-        headers: {
-          'Content-Type': 'application/json; charset=utf-8', // Spécifie que nous envoyons des données JSON
-          // Vous pouvez ajouter d'autres en-têtes si nécessaire
-        },
-        
-        body: JSON.stringify({
-          name: this.state.username,
-          lastName: this.state.lastName,
-          Mail: this.state.email,
-          Password: this.state.password,
-        }), // Convertit les données en format JSON
-
-      };
-
-      const response = await fetch('http://10.54.90.253:8082/CreactCompte', options);//10.0.2.2
-     
-      // const responseData = await response.text();
-      // console.log('Server Response:', responseData);
-
-      if (response.ok) {
-        console.log('Envoi avec succès');
-      } else {
-        console.log('Erreur envoi form data');
-      }
-    } catch (error) {
-      console.error('Erreur requete :', error);
-    }
-  }
-};
-     render(){
-    return(
-        <View style={styles.container}>
-               <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log("Créer compte")}>
-          <Link to="/">
-            <Text style={styles.createAccountText}>Retour</Text>
-          </Link>
-        </TouchableOpacity>
-        <Text style={styles.title}>Crée Compte</Text>
-       
-        <TextInput
-          style={styles.input}
-          value={this.state.username}
-          onChangeText={(text) => this.handleChange('username', text)}
-          placeholder="Username"
-        />
-        <TextInput
-          style={styles.input}
-          value={this.state.lastName}
-          onChangeText={(text) => this.handleChange('lastName', text)}
-          placeholder="Last Name"
-        />
-        <TextInput
-          style={styles.input}
-          value={this.state.email}
-          onChangeText={(text) => this.handleChange('email', text)}
-          placeholder="Mail"
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
-          value={this.state.password}
-          onChangeText={(text) => this.handleChange('password', text)}
-          placeholder="Password"
-          secureTextEntry
-        />
-  
-        <Button title="Login" onPress={this.ChampsRemplie} />
-        
-      </View>
-    );
-  }
-  };
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 14,
-    },
-    title: {
-      fontSize: 20,
-      fontWeight: 'bold',
-      marginBottom: 13,
-    },
-    createAccountButton: {
-      marginTop: 16,
-      backgroundColor: 'green',
-      padding: 10,
-      marginLeft:300,
-      borderRadius: 5,
-    },
-    createAccountText: {
-      color: 'white',
-      textAlign: 'center',
-    },
-    input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      marginBottom: 16,
-      padding: 8,
-      width: '100%',
-    },
+const CreactCompte: React.FC = () => {
+  const [state, setState] = useState<CreactCompteState>({
+    username: '',
+    lastName: '',
+    email: '',
+    password: '',
   });
-export default CreactCompte
+
+  const handleChange = (fieldName: keyof CreactCompteState, value: string) => {
+    setState((prevState) => ({ ...prevState, [fieldName]: value }));
+  };
+
+  const ChampsRemplie = async () => {
+    const { username, lastName, email, password } = state;
+
+    if (username === '' || lastName === '' || email === '' || password === '') {
+      Alert.alert("Tous les champs ne sont pas remplis");
+    } else {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+          },
+          body: JSON.stringify({
+            name: state.username,
+            lastName: state.lastName,
+            Mail: state.email,
+            Password: state.password,
+          }),
+        };
+
+        const response = await fetch('http://192.168.1.116:8082/CreactCompte', options);
+
+        if (response.ok) {
+          console.log('Envoi avec succès');
+        } else {
+          console.log('Erreur envoi form data');
+        }
+      } catch (error) {
+        console.error('Erreur requete :', error);
+      }
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log("Créer compte")}>
+        <Link to="/">
+          <Text style={styles.createAccountText}>Retour</Text>
+        </Link>
+      </TouchableOpacity>
+      <Text style={styles.title}>Créez votre compte</Text>
+
+      <TextInput
+        style={styles.input}
+        value={state.username}
+        onChangeText={(text) => handleChange('username', text)}
+        placeholder="Username"
+        placeholderTextColor="#F4B322"
+      />
+      <TextInput
+        style={styles.input}
+        value={state.lastName}
+        onChangeText={(text) => handleChange('lastName', text)}
+        placeholder="Last Name"
+        placeholderTextColor="#F4B322"
+      />
+      <TextInput
+        style={styles.input}
+        value={state.email}
+        onChangeText={(text) => handleChange('email', text)}
+        placeholder="Mail"
+        placeholderTextColor="#F4B322"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        value={state.password}
+        onChangeText={(text) => handleChange('password', text)}
+        placeholder="Password"
+        placeholderTextColor="#F4B322"
+        secureTextEntry
+      />
+<View style={styles.signupButton}>
+  <Button title="Inscription" onPress={ChampsRemplie} />
+</View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 14,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: '800',
+    marginBottom: 20,
+    color: '#FAFAFA',
+    width: 168,
+    height: 40,
+    top: 3,
+    left: 1,
+    fontFamily: 'sans-serif',
+    lineHeight: 20,
+    letterSpacing: 0,
+    textAlign: 'left', 
+  },
+  input: {
+    height: 40,
+    borderColor: '#F4B322',
+    color: '#F4B322',
+    borderWidth: 1,
+    borderRadius: 8, 
+    marginBottom: 16,
+    padding: 8,
+    width: '100%',
+  },
+  signupButton: {
+    backgroundColor: 'black',
+    color: 'orange',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginTop: 20,
+  },
+  Button: {
+    marginTop: 16,
+    backgroundColor: 'black', 
+    borderRadius: 8, 
+    paddingVertical: 8, 
+    paddingHorizontal: 10, 
+    alignItems: 'center', 
+    borderColor: 'white',
+    borderWidth: 1, 
+  },
+  ButtonText: {
+    color: 'orange', 
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  createAccountButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    marginTop: 16,
+    backgroundColor: '#F4B322', 
+    margin: 23,
+    borderRadius: 8, 
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center', 
+    
+    borderColor: 'white',
+  },
+  createAccountText: { 
+    color: 'black', 
+  },
+});
+
+export default CreactCompte;
+
 
 // CreactCompteState et IProps: Ces sont des interfaces TypeScript qui définissent les types pour l'état (CreactCompteState) et les propriétés (IProps) du composant.
 
