@@ -42,7 +42,7 @@ const CreactCompte: React.FC = () => {
           }),
         };
 
-        const response = await fetch('http://192.168.1.116:8082/CreactCompte', options);
+        const response = await fetch('http://10.54.90.60:8082/CreactCompte', options);
 
         if (response.ok) {
           console.log('Envoi avec succès');
@@ -103,6 +103,7 @@ const CreactCompte: React.FC = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'black',
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',

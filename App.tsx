@@ -9,6 +9,7 @@ import CompteParent from './Components/CompteParent';
 import AjouterTache from './Components/AjouterTache';
 import Profils from './Components/Profils';
 import Prenium from './Components/Premium';
+import Stats from './Components/Stats';
 import ModifierProfil from './Components/ModifierProfil';
 import Tache from './Components/Tache';
 import OngleAjouterRecompense from './Components/Composents_Reutilisable/OngletAjoueRecompence';
@@ -33,10 +34,11 @@ export default function App() {
             <Route path="/Compte/:User/CompteParent" element={<CompteParent />} />
             <Route path="/Compte/:User/CompteParent/Profils" element={<Profils />} />
             <Route path="/Compte/:User/CompteParent/Profils/ModifierProfil" element={<ModifierProfil />} />
-            <Route path="/Compte/:User/CompteParent/Prenium" element={<Prenium />} />
-            <Route path="/Compte/:User/CompteParent/Prenium/AjouterRecompense" element={<OngleAjouterRecompense />} />
+            <Route path="/Compte/:User/CompteParent/Recompense" element={<Prenium />} />
+            <Route path="/Compte/:User/CompteParent/Prenium/AjouterRecompense/:AjoueModification/:Abonement/:paramTab/:ID" element={<OngleAjouterRecompense />} />
             <Route path="/Compte/:User/CompteParent/Tache" element={<Tache />} />
             <Route path="/Compte/:User/CompteParent/Tache/AjouterTache" element={<AjouterTache />} />
+            <Route path="/Compte/:User/CompteParent/Stats" element={<Stats />} />
             <Route path="*" element={<Erreur />} />
           </Routes>
         </NativeRouter>
