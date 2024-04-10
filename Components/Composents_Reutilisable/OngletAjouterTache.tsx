@@ -95,8 +95,8 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
       state.point !== 0 &&
       state.Penalitee !== '' &&
       state.Description !== '' &&
-      state.NameEnfant !== '' &&
-      state.Recurence !== 0
+      state.NameEnfant !== '' 
+     // state.Recurence !== 0
       // selectedValue !== '' &&
       // selectedNameValue !== ''
     ) {
@@ -238,7 +238,9 @@ const responseData = await response.json();
   style={styles.input}
   placeholder="Point"
   keyboardType="numeric"
-  value={state.point.toString()}
+  value={state.point.toString()
+  
+  }
   onChangeText={text => handleChange('point', text)}
 />
 

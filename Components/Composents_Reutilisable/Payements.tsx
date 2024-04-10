@@ -20,12 +20,12 @@ const Paiement = () => {
    
     const timer = setTimeout(async () => {
       try {
-        // Votre logique de soumission de paiement ici
+       
       } catch (error : any) {
         console.error('Erreur :', error);
         setErrorMessage(error.message || 'Une erreur est survenue.');
       } finally {
-        setLoading(false); // Toujours définir loading sur false, même en cas d'erreur
+        setLoading(false); 
       }
     }, 1000);
 
@@ -75,7 +75,7 @@ const Paiement = () => {
       console.error('Erreur :', error);
       setErrorMessage(error.message || 'Une erreur est survenue.');
     } finally {
-      setLoading(false); // Toujours définir loading sur false, même en cas d'erreur
+      setLoading(false); 
       clearTimeout(timer);
     }
   };

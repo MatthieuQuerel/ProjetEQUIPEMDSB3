@@ -91,7 +91,7 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
     onChangeText={setPassword}
     secureTextEntry={true}
 />
-                    </View>
+</View>
                 ))}
             </View>
             <TouchableOpacity onPress={handleSave}>

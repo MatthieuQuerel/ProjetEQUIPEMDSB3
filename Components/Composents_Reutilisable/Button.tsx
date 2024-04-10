@@ -5,6 +5,7 @@ import { Link } from 'react-router-native';
 interface ButtonNav {
   name: string;
   chemin: string;
+
 }
 
 const ButtonNav: React.FC<ButtonNav> = ({ name, chemin }) => (

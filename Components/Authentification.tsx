@@ -113,6 +113,7 @@ const Authentification: React.FC<IProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'black',
     flex: 2,
     justifyContent: 'center',
      alignItems: 'center',   
@@ -143,8 +144,7 @@ const styles = StyleSheet.create({
     width: '100%',
      
   },
-  Button: {
-   
+  Button: {  
     marginTop: 16,
     backgroundColor: 'black', 
     borderRadius: 8, 
