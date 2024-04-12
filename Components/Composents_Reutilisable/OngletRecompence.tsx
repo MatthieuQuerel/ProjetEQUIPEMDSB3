@@ -35,7 +35,7 @@ const OngletRecompense = () => {
         const fetchData = async () => {
             if (activeTab === 2 && params) {
                 try {
-                    const response = await fetch(`http://172.20.10.2:8082/AbonnerPrenium/${params.User}`, {
+                    const response = await fetch(`http://192.168.1.116:8082/AbonnerPrenium/${params.User}`, {
                         method: "GET",
                         headers: {
                             'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const OngletRecompense = () => {
                 }
             }else{
                 try {
-                const response = await fetch(`http://172.20.10.2:8082/AbonnerStandard/${params.User}`, {
+                const response = await fetch(`http://192.168.1.116:8082/AbonnerStandard/${params.User}`, {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -79,65 +79,36 @@ const OngletRecompense = () => {
         fetchData();
     }, [activeTab, params]);
 
-    // const buildLink = (BoutonAjoueModif: number, Typeabonement: number, task: any) => {
-    //     let paramTabString = ''; // Initialiser paramTabString en dehors de la condition
-    //     const AjoueModification = typeof paramLink.AjoueModification !== 'undefined' ? paramLink.AjoueModification.toString() : '0';
-    //     if (BoutonAjoueModif === 1) {
-    //         paramLink.AjoueModification = 1;
-    //         const paramTabObj = {
-    //             ID: task.IdRecompense.toString(),
-    //             RecompenseAdmin: task.RecompenseAdmin,
-    //             Description: task.Description,
-    //             Point: task.Point.toString(),
-    //             Name: task.Name,
-    //         };
-    
-    //         paramTabString = encodeURIComponent(JSON.stringify(paramTabObj));
-    //         console.log(paramTabString)
-    //     } else {
-    //         paramLink.AjoueModification = 0;
-    //         paramTabString = "";
-    //     }
-    
-    //     const TypeabonementString = Typeabonement.toString();
-    
-    //     if (Typeabonement === 1) {
-    //         paramLink.Abonnement = 1;
-    //     } else {
-    //         console.log("Typeabonement est a 0");
-    //         paramLink.Abonnement = 0;
-    //     }
-    
-    //     const queryParams = new URLSearchParams({
-    //         AjoueModification: AjoueModification,
-    //         Abonement: TypeabonementString,
-    //         paramTab: paramTabString,
-    //         ID: task.IdRecompense.toString(),
-    //     }).toString();
-    
-    //     console.log(queryParams)
-    //     const queryStringWithSlashes = queryParams.split('&').join('/');
-    
-    //     return `/Compte/${params.User}/CompteParent/Prenium/AjouterRecompense${queryStringWithSlashes ? `/${queryStringWithSlashes}` : ''}`;
-    // };
-    
-
-
     const buildLink = (BoutonAjoueModif: number,Typeabonement: number,task: any) => {
        
         if(BoutonAjoueModif === 1){
             paramLink.AjoueModification = 1 ;
-
-            const paramTabObj = {
-                ID: task.IdRecompense.toString(),
-                RecompenseAdmin: task.RecompenseAdmin,
-                Description: task.Description,
-                Point: task.Point.toString(),
-                Name: task.Name,
-            };
-    
+    let  paramTabObj 
+     if(Typeabonement == 0){
+        console.log("tes dans le 0 pour modifier passe  ///////////////////////////////////////////")
+        paramTabObj = {
+            ID: task.IdRecompense.toString(),
+            Recompense: task.Recompense,
+            Description: task.Description,
+            Point: task.Point.toString(),
+            Name: task.Name,
+            idEnfant: task.IdPlayer.toString(),
+        };
+     } else{
+        paramTabObj = {
+            ID: task.IdRecompense.toString(),
+            Recompense: task.RecompenseAdmin,
+            Description: task.Description,
+            Point: task.Point.toString(),
+            Name: task.Name,
+            idEnfant: task.IdPlayer.toString(),
+            idRecompenseAdmin: task.IdRecompenseAdmin.toString(),
+        };
+     }
+           
             // Stringify the object and push it to paramTab array
             paramLink.paramTab.push(JSON.stringify(paramTabObj));
+            paramLink.ID= task.IdRecompense.toString() // atribué id 
         }
         if(Typeabonement === 1){
             paramLink.Abonnement = 1 ;
@@ -179,16 +150,17 @@ const OngletRecompense = () => {
      
                                 <Text>partie standard</Text>
                                 {tasks.map((task, index) => (
-                                     <TouchableOpacity  onPress={() => navigate(buildLink(1,0,task))}>
-                                    <View key={index} style={[styles.card]}>
-                                        <Text style={[styles.cardText, styles.bold, styles.center]}>Recompense: {task.Recompense}</Text>
-                                        <Text style={[styles.cardText, styles.bold, styles.center]}>Description: {task.Description}</Text>
-                                        <Text style={[styles.cardText, styles.bold, styles.center]}>point: {task.Point}</Text>
-                                        <Text style={[styles.cardText, styles.bold, styles.center]}>Name: {task.Name}</Text>
-                                        <Text style={[styles.cardText, styles.bold, styles.center,{opacity:0}]}>IdRecompense: {task.IdRecompense}</Text>
-                                    </View>
-                                    </TouchableOpacity>
-                                ))}
+  <TouchableOpacity key={index} onPress={() => navigate(buildLink(1, 0, task))}>
+    <View style={[styles.card]}>
+      <Text style={[styles.cardText, styles.bold, styles.center]}>Recompense: {task.Recompense}</Text>
+      <Text style={[styles.cardText, styles.bold, styles.center]}>Description: {task.Description}</Text>
+      <Text style={[styles.cardText, styles.bold, styles.center]}>point: {task.Point}</Text>
+      <Text style={[styles.cardText, styles.bold, styles.center]}>Name: {task.Name}</Text>
+      <Text style={[styles.center, { opacity: 0 }]}>IdEnfant: {task.IdPlayer}</Text>
+      <Text style={[styles.center, { opacity: 0 }]}>IdRecompense: {task.IdRecompense}</Text>
+    </View>
+  </TouchableOpacity>
+))}
                                 <TouchableOpacity style={styles.button} onPress={() => console.log(`+ clicked`)}>
                 <Link to={buildLink(0,0,[])}>
                     <Text style={styles.buttonText}>+</Text>
@@ -213,7 +185,9 @@ const OngletRecompense = () => {
                                                 <Text style={[styles.cardText, styles.bold, styles.center]}>Description: {task.Description}</Text>
                                                 <Text style={[styles.cardText, styles.bold, styles.center]}>Point: {task.Point}</Text>
                                                 <Text style={[styles.cardText, styles.bold, styles.center]}>Name: {task.Name}</Text>
-                                                <Text style={[styles.cardText, styles.bold, styles.center,{opacity:0}]}>IdRecompense: {task.IdRecompense}</Text>
+                                                <Text style={[ styles.center,{opacity:0}]}>IdPlayer: {task.IdPlayer}</Text>
+                                                <Text style={[ styles.center,{opacity:0}]}>IdRecompense: {task.IdRecompense}</Text>
+                                                <Text style={[ styles.center]}>IdRecompense: {task.IdRecompenseAdmin}</Text>
                                               </View>
                                            
                                          </TouchableOpacity>

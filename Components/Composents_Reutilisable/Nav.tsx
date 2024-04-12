@@ -11,12 +11,12 @@ const NavBar: React.FC<IProps> = () => {
  
   return (
     <View style={styles.container}>     
-      <TouchableOpacity style={styles.button}  onPress={() => navigate(`/Compte/${params.User}`)}>
+      {/* <TouchableOpacity style={styles.button}  onPress={() => navigate(`/Compte/${params.User}`)}>
       <Svg width="23" height="21" viewBox="0 0 23 24" fill="none">
       <Path d="M22.8109 10.5C22.8109 11.2031 22.225 11.75 21.5609 11.75H20.3109L20.35 18C20.35 18.1172 20.35 18.2344 20.35 18.3125V18.9375C20.35 19.8359 19.6469 20.5 18.7875 20.5H18.1625C18.0844 20.5 18.0453 20.5 18.0062 20.5C17.9672 20.5 17.889 20.5 17.85 20.5H16.6H15.6625C14.764 20.5 14.1 19.8359 14.1 18.9375V18V15.5C14.1 14.8359 13.514 14.25 12.85 14.25H10.35C9.64685 14.25 9.09998 14.8359 9.09998 15.5V18V18.9375C9.09998 19.8359 8.39685 20.5 7.53748 20.5H6.59998H5.34998C5.27185 20.5 5.23279 20.5 5.15466 20.5C5.1156 20.5 5.07654 20.5 5.03748 20.5H4.41248C3.51404 20.5 2.84998 19.8359 2.84998 18.9375V14.5625C2.84998 14.5625 2.84998 14.5234 2.84998 14.4844V11.75H1.59998C0.896851 11.75 0.349976 11.2031 0.349976 10.5C0.349976 10.1484 0.467163 9.83594 0.740601 9.5625L10.7406 0.8125C11.014 0.539062 11.3265 0.5 11.6 0.5C11.8734 0.5 12.1859 0.578125 12.4203 0.773438L22.3812 9.5625C22.6937 9.83594 22.85 10.1484 22.8109 10.5Z" fill="#F4B322"/>
       </Svg>
         <Text style={styles.buttonText}>compte</Text>     
-      </TouchableOpacity>
+      </TouchableOpacity> */}
      
       <TouchableOpacity style={styles.button} onPress={() => navigate(`/Compte/${params.User}/CompteParent`)}>       
       <Svg width="23" height="21" viewBox="0 0 23 24" fill="none">

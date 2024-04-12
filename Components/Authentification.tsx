@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link, useNavigate } from 'react-router-native';
-
+// import { comparer } from './Composents_Reutilisable/Cryptage';
 
 interface AuthentificationState {
   email: string;
@@ -55,6 +55,12 @@ const Authentification: React.FC<IProps> = () => {
           if(responseData !=""){
             console.log('Réponse du serveur:', responseData);
             console.log('Réponse du serveur:', responseData.Mail);
+            console.log('Réponse du serveur:', responseData.Password);
+            // if(await comparer(password,responseData.Password)){
+            //   navigate(`/Compte/${email}`);
+            // }else{
+            //   alert('Password incorrect');
+            // }
             // toast.show({
             //   type: 'success',
             //   text1: "Authentification Réussi", // Le message à afficher

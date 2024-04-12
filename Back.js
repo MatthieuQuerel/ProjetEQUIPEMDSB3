@@ -402,6 +402,7 @@ app.put("/Profils/:mail/Modification", async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 ///////////////////////////////////////afficher tout les recompense pour acceil /////////////////////////////////////////////////
 app.get("/ToutRecompense/:mail",async(req,res) => {
 
@@ -434,7 +435,7 @@ app.get("/AbonnerPrenium/:mail", async(req, res) => {
   const Mail = req.params.mail;
   console.log(Mail)
   const query = `SELECT Abonner FROM user WHERE Mail = '${Mail}'`
-const queryRecompense = `SELECT player.Name, recompense.Point, recompense.Recompense, recompenseAdmin.RecompenseAdmin, recompenseAdmin.description,Recompense.idRecompense FROM recompense  INNER JOIN user ON recompense.users = user.idUser   INNER JOIN player ON recompense.Players = player.idPlayer  LEFT JOIN recompenseAdmin ON recompense.RecompenseAdmin = recompenseAdmin.idRecompenseAdmin WHERE user.Mail = '${Mail}' AND recompense.Abonnement = 1`
+const queryRecompense = `SELECT player.Name ,player.idPlayer, recompense.Point, recompense.Recompense, recompenseAdmin.RecompenseAdmin ,recompenseAdmin.idRecompenseAdmin, recompenseAdmin.description,Recompense.idRecompense FROM recompense  INNER JOIN user ON recompense.users = user.idUser   INNER JOIN player ON recompense.Players = player.idPlayer  LEFT JOIN recompenseAdmin ON recompense.RecompenseAdmin = recompenseAdmin.idRecompenseAdmin WHERE user.Mail = '${Mail}' AND recompense.Abonnement = 1`
 //const queryRecompense = `SELECT player.Name,Recompense.Point,RecompenseAdmin.RecompenseAdmin,RecompenseAdmin.description FROM recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  INNER JOIN RecompenseAdmin ON RecompenseAdmin.idRecompenseAdmin =Recompense.idRecompense  WHERE user.Mail = '${Mail}'`// AND Abonnement = '1'
 
   try {
@@ -456,6 +457,9 @@ const queryRecompense = `SELECT player.Name, recompense.Point, recompense.Recomp
           RecompenseAdmin: recompensePrenium.RecompenseAdmin,
           Description: recompensePrenium.description,
           IdRecompense: recompensePrenium.idRecompense,
+          IdPlayer: recompensePrenium.idPlayer,
+          IdRecompenseAdmin: recompensePrenium.idRecompenseAdmin,
+          
       }));
       return res.json(RecompensePrenium);
   }
@@ -470,7 +474,7 @@ app.get("/AbonnerStandard/:mail", async(req, res) => {
   const connection = await conection(); // Utilisez la fonction conection au lieu de conection
   const Mail = req.params.mail;
   
-  const query = `SELECT player.Name,Recompense.Point,Recompense.Description,Recompense.Recompense,Recompense.idRecompense FROM Recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  WHERE user.Mail = '${Mail}' AND Abonnement = '0'`
+  const query = `SELECT player.Name,player.idPlayer,Recompense.Point,Recompense.Description,Recompense.Recompense,Recompense.idRecompense FROM Recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  WHERE user.Mail = '${Mail}' AND Abonnement = '0'`
 
   try {
     const data = await executerequete(connection, query);
@@ -480,6 +484,7 @@ app.get("/AbonnerStandard/:mail", async(req, res) => {
       Description: recompenseStandard.Description,
       Recompense: recompenseStandard.Recompense,
       IdRecompense: recompenseStandard.idRecompense,
+      IdPlayer: recompenseStandard.idPlayer,
       
     }));
   
@@ -492,6 +497,7 @@ app.get("/AbonnerStandard/:mail", async(req, res) => {
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })
+
 /////////////////////////////////////////récompense adrmin dans combo pour ajouté ////////////////////////////////////////
 app.get("/RecompenseAdmin", async(req, res) => {
   const connection = await conection(); // Utilisez la fonction conection au lieu de conection
@@ -526,16 +532,16 @@ app.post("/AjoutRecompense/:mail", async(req, res) => {
   const dataIdUser = await executerequete(connection, queryIdUser);
   const idUsers = dataIdUser[0].IdUser;
 
-  const Date = new date()
-    const années = Date.getFullYear()
-    const mois = Date.getMonth()+1
-    const jour = Date.getDate()
-    const DateCreation = `${années}-${mois}-${jour}`;
-    
+  const currentDate = new Date();
+  const années = currentDate.getFullYear();
+  const mois = currentDate.getMonth() + 1;
+  const jour = currentDate.getDate();
+  const DateCreation = `${années}-${mois}-${jour}`;
+    console.log(recompenseData.Abonement +"back ");
   
  let queryAbonement  = ""
 
-if (recompenseData.Abonement === '0'){
+if (recompenseData.Abonement === 0){
   queryAbonement = `INSERT IGNORE INTO recompense (users, Players, Recompense, Abonnement, RecompenseAdmin, Point, Description,DateCreation) VALUES ('${idUsers}', '${recompenseData.IDPlayer}', '${recompenseData.NomRecompense}', '${recompenseData.Abonement}', NULL, '${recompenseData.Point}', '${recompenseData.Description}','${DateCreation}')`
  console.log("je vais dans bonement standerd")
 }else{
@@ -555,42 +561,57 @@ if (recompenseData.Abonement === '0'){
     res.status(500).json({ error: 'Internal Server Error' })
   }
 })
+
+
 ////////////////////////////////////Modifier réccompense //////////////////////////////////////////
 app.put("/Modification/:mail", async (req, res) => {
-
-  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const connection = await conection(); // Assurez-vous que cette fonction est correctement définie
   const Mail = req.params.mail;
-  let {PlayerID,UserID,Recompense,Abonement,RecompenseAdmin,Point, Description} = req.body;
- 
-  // console.log(PlayerID)
-  // console.log(UserID)
-  // console.log(Recompense)
-  // console.log(Abonement) 
-  // console.log(RecompenseAdmin) 
-  // console.log(Point) 
-  // onsole.log(Description)
-  const query = `
+  console.log(Mail)
+  const currentDate = new Date();
+  const années = currentDate.getFullYear();
+  const mois = currentDate.getMonth() + 1;
+  const jour = currentDate.getDate();
+  const DateCreation = `${années}-${mois}-${jour}`;
+  const { IDPlayer, NomRecompense, Abonement, Point, Description,ID } = req.body;
+  console.log(DateCreation)
+  console.log(NomRecompense)
+  console.log(Abonement)
+  console.log(Description)
+  console.log(IDPlayer)
+  console.log(Point)
+  console.log(ID)
+  const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${IDPlayer}'`;
+  const dataIdUser = await executerequete(connection, queryIdUser);
+  const idUsers = dataIdUser[0].IdUser;
+  console.log(idUsers)
+  let query = `
       UPDATE Recompense 
       SET 
-      Recompense.name = '${PlayerID}', 
-      Recompense.Lastname = '${UserID}', 
-      Recompense.Mail = '${Recompense}', 
-      Recompense.Password = '${Abonement}' 
-      Recompense.Password = '${RecompenseAdmin}' 
-      Recompense.Password = '${Point}' 
-      Recompense.Password = '${Description}'`;
+      Recompense.Players = '${IDPlayer}', 
+      Recompense.users = '${idUsers}', 
+      Recompense.Abonnement = '${Abonement}',  
+      Recompense.Point = '${Point}', 
+      Recompense.Description = '${Description}', 
+      Recompense.DateCreation  = '${DateCreation}',`
+     
+  if (Abonement === 0) {
+    query += ` Recompense.Recompense = '${NomRecompense}', Recompense.Description = '${Description}', Recompense.RecompenseAdmin = NULL`;
+  } else {
+    query += ` Recompense.RecompenseAdmin = '${NomRecompense}', Recompense.Description = NULL, Recompense.Recompense = NULL`;
+  }
 
-  console.log(query); // Pour vérifier que la requête est correcte dans la console du serveur
-
+  query += ` WHERE Recompense.idRecompense = '${ID}'`;
+console.log(query)
   try {
- 
-      await executerequete(connection, query);
-      return res.json({ message: "Mise à jour Recompense réussie" });
+    await executerequete(connection, query);
+    return res.json({ message: "Mise à jour Recompense réussie" });
   } catch (error) {
-      console.log("Requête impossible", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    console.log("Requête impossible", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 //////////////////////////////////////supression Récompense  /////////////////////////////////////////////////////
 app.delete("/SupresionRecompense/:mail", async (req, res) => {
   try {
@@ -613,8 +634,30 @@ app.delete("/SupresionRecompense/:mail", async (req, res) => {
   }
     
 })
+/////////////////////////////////////player Recompense Notification/////////////////////////////////
+app.get("/playerRecompenseNotification/:mail", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+  
+  const queryRecompenseNotification = `SELECT p.Name AS PlayerName, p.Point AS PlayerPoints, r.idRecompense, r.Recompense, r.Point AS RewardPoints, r.DateCreation AS RewardCreationDate FROM user u INNER JOIN player p ON u.idUser = p.IdUser INNER JOIN recompense r ON p.idPlayer = r.Players WHERE u.Mail = '${Mail}'  AND p.Point > r.Point ORDER BY r.DateCreation LIMIT 4;`
 
+  try {
+    const data = await executerequete(connection, queryRecompenseNotification);
+    const RecompenseNotification = data.map((Recompensenotification) => ({
+      PlayerName: Recompensenotification.PlayerName,
+      PlayerPoints: Recompensenotification.PlayerPoints,
+      Recompense : Recompensenotification.Recompense ,
+    }));
+  
+       return res.json(RecompenseNotification);
+    
+     
 
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
 
 /////////////////////////////////////coter strapie//////////////////////////////////////////////////
 
@@ -626,7 +669,7 @@ app.post('/Abonnement/:mail', async (req, res) => {
     const connection = await conection();
     const query =`UPDATE user SET Abonner = 1 WHERE Mail = '${Mail}'`;
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 12000, //process.env.STRIPE_Pice,//12000,
+      amount: 6990, //process.env.STRIPE_Pice,//12000,
       currency: 'eur',
       payment_method: payment_method,
       confirm: true,

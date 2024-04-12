@@ -23,7 +23,7 @@ const STRIPE_PUBLISHABLE_KEY = 'pk_test_51OQ4atDvUzqU5phQVcuCtfT9JjTI0O81dDBDdCR
 export default function App() {
   return (
     <View style={styles.appContainer}>
-      
+   
       <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
         <NativeRouter>
           <Routes>
@@ -43,6 +43,7 @@ export default function App() {
           </Routes>
         </NativeRouter>
       </StripeProvider>
+    
       <Toast />
     </View>
   );

@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'rea
 import RNPickerSelect from 'react-native-picker-select';
 import { useParams } from 'react-router-dom'; 
 import {useNavigate} from 'react-router-native';
+
 interface OngletAjoueRecompenseProps {
   user?: string;
 }
@@ -29,22 +30,18 @@ interface OngletAjoueRecompenseState {
   recompenseDataAdmin: RecompenseDataAdmin[];
 }
 
+
 const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
   const  param = useParams()
   const User = param.User 
-  const AjoueModifications = param.AjoueModifications
+  const AjoueModification= param.AjoueModification;
   const ID = param.ID
   const abonementString = param.Abonement;
   const paramchamps = param.paramTab;
-
-  console.log('ID:', ID);
-  console.log('abonementString:', abonementString);
-  console.log('paramchamps:', paramchamps);
-  console.log('AjoueModifications:', AjoueModifications);
-  console.log('////////////////////////////////////////////////////////////////////////////');
-
+  const navigate = useNavigate();
   const [AjoutModifier, setAjoutModifier] = useState(false);
-  //const [Abonements, setAbonements] = useState(false);
+  const [ModifierValeurModifier, setModifierValeurModifier] = useState(true);
+
   const [state, setState] = useState<OngletAjoueRecompenseState>({ 
     Point: 0,
     NomRecompense: '',
@@ -54,8 +51,88 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
     playerData: [],
     recompenseDataAdmin: [],
   });
-  const navigate = useNavigate();
-// récuperation de l'abonement client
+  
+  let IDCard: string | undefined;
+     if (ID !== undefined) {
+      IDCard = ID.split('=')[1];
+    }
+    let ModificationValue: string | undefined;
+    if (AjoueModification !== undefined) {
+      ModificationValue = AjoueModification.split('=')[1];
+    } 
+    
+  const AfficherValeurModifier = () => {
+    const cleanParamTab: string = param.paramTab?.replace('paramTab=,', '') || "";
+    
+   
+  if (ModificationValue === '1') {
+    setAjoutModifier(true);
+  }else{
+    setAjoutModifier(false);
+  }
+   
+    console.log('AjoueModifications si a 1:', ModificationValue);
+    
+  
+    if (cleanParamTab !== "" && ModificationValue === '1' ) {
+      try {
+        const paramchamps = JSON.parse(cleanParamTab);
+
+        let Abonementvaleur: string | number | undefined;
+
+        if (abonementString !== undefined) {
+           Abonementvaleur = abonementString.split('=')[1].trim();
+           }
+        if(Abonementvaleur === 0){
+        if (state.Point !== paramchamps.Point || 
+            state.NomRecompense !== paramchamps.Recompense || 
+            state.Description !== paramchamps.Description || 
+            state.NameEnfant !== paramchamps.idEnfant) {
+          setState(prevState => ({
+            ...prevState,
+            Point: paramchamps.Point,
+            NomRecompense: paramchamps.Recompense,
+            Description: paramchamps.Description,
+            NameEnfant: paramchamps.idEnfant,
+          }));
+        }
+      }else{
+        if (state.Point !== paramchamps.Point || 
+          state.NomRecompense !== paramchamps.idRecompenseAdmin || 
+          state.NameEnfant !== paramchamps.idEnfant) {
+        setState(prevState => ({
+          ...prevState,
+          Point: paramchamps.Point,
+          NomRecompense: paramchamps.idRecompenseAdmin,
+          NameEnfant: paramchamps.idEnfant,
+        
+        }));
+      }
+      }
+        
+        console.log(state.NomRecompense);
+      } catch (error) {
+        console.error('Erreur lors de l\'analyse de paramchamps :', error);
+      }
+    } else {
+      console.error('param.paramTab est vide ou non défini ou AjoueModification n\'est pas égal à 1 ou ChangeValue n\'est pas égal à 0');
+    }
+  }
+  
+  // Appelez la fonction AfficherValeurModifier
+  console.log(ModifierValeurModifier +" test ModifierValeurModifier")
+  console.log(ID +" test ID" )
+  if(ModifierValeurModifier && ID !=""){
+    AfficherValeurModifier();
+    setModifierValeurModifier(false)
+    setAjoutModifier(true)
+  }
+  useEffect(() => {
+    if (paramchamps === undefined || ID === "") {
+      setAjoutModifier(false);
+    }
+  }, [paramchamps, ID]);
+
   useEffect(() => {
    
     if (abonementString !== undefined) { 
@@ -75,15 +152,9 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
       console.log("La variable abonementString est undefined.");
     }
 
-if (AjoueModifications) {
-  setAjoutModifier(true);
-}
-  }, [AjoueModifications]);
+  }, []);
 
-
-
-
-
+  
   const handleChange = (fieldName: keyof OngletAjoueRecompenseState, value: string | number) => {
     setState(prevState => ({ ...prevState, [fieldName]: value }));
   };
@@ -107,9 +178,9 @@ if (AjoueModifications) {
           setState(prevState => ({ ...prevState, playerData: userData }));
          
         }
-  console.log(state.Abonement)
+  
         if (state.Abonement === 1) {
-          console.log(state.Abonement + " le Abonements inter")
+          
           const responseAdmin = await fetch(`http://192.168.1.116:8082/RecompenseAdmin`);
           if (!responseAdmin.ok) {
             throw new Error('Échec de la requête pour récupérer les données de récompense');
@@ -117,6 +188,7 @@ if (AjoueModifications) {
           const adminData = await responseAdmin.json();
           setState(prevState => ({ ...prevState, recompenseDataAdmin: adminData }));
         }
+        
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }
@@ -130,31 +202,47 @@ if (AjoueModifications) {
      
 console.log(AjoutModifier)
       if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== '') {
-        const URL = AjoutModifier ? `http://192.168.1.116:8082/Modification/${User}` : `http://192.168.1.116:8082/AjoutRecompense/${User}`;
-        console.log(URL)
-        const response = await fetch(URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json; charset=utf-8',
-          },
-          body: JSON.stringify({
-            NomRecompense: state.NomRecompense,
-            Point: state.Point,
-            Abonement: state.Abonement,
-            IDPlayer: state.NameEnfant,
-            Description: state.Description,  
-            ID:ID,                         
-          }), 
-        })
-        
-        
-        console.log(response)
-        if (response.ok) {
-          console.log('Envoi avec succès');
-        } else {
-          console.log('Erreur envoi form data');
-          //setState(prevState => ({ ...prevState, NomRecompense: '', Point: 0, Abonement: 0, NameEnfant: '', Description: '' }));
-        }
+        let URL;
+        let method;
+console.log("AjoueModification : "+AjoueModification)
+
+if (AjoueModification === '1' && IDCard !== '') {
+  URL = `http://192.168.1.116:8082/Modification/${User}`;
+  method = 'PUT';
+
+} else {
+  URL = `http://192.168.1.116:8082/AjoutRecompense/${User}`;
+  method = 'POST';
+}
+console.log(URL);
+
+console.log(state.Abonement+ "Abonement");
+
+const response = await fetch(URL, {
+  method: method,
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',
+  },
+  body: JSON.stringify({
+    NomRecompense: state.NomRecompense,
+    Point: state.Point,
+    Abonement: state.Abonement,
+    IDPlayer: state.NameEnfant,
+    Description: state.Description,
+    ID: IDCard,
+  }),
+ 
+});
+
+console.log(response);
+
+if (response.ok) {
+  console.log('Envoi avec succès');
+  
+} else {
+  console.log('Erreur envoi form data');
+  // setState(prevState => ({ ...prevState, NomRecompense: '', Point: 0, Abonement: 0, NameEnfant: '', Description: '' }));
+} 
       } else {
         console.log('Tous les champs sont requis');
       }
@@ -173,7 +261,7 @@ console.log(AjoutModifier)
             'Content-Type': 'application/json; charset=utf-8', 
           },
           body: JSON.stringify({        
-            id: ID,                    
+            id: IDCard,                    
           }), 
         };
         const response = await fetch(`http://192.168.1.116:8082/SupresionRecompense/${User}`, options);
@@ -181,13 +269,15 @@ console.log(AjoutModifier)
           console.log('Erreur dans la suppression');              
         } else {
           console.log('Suppression avec succès');
+          navigate(`/Compte/${param.User}/CompteParent/Recompense`)
         }
       }
     } catch (error) {
       console.error('champs non remplie')
     }
   };
-  console.log(state.Abonement + " le dernier  des abonement")
+  
+console.log(AjoutModifier + "gffffffffffffffffffffffdffuysgfuydsgyfgsduygfuysdguyfgsuydgfuygsduyfguysdgfuyfgsudygfuygsduygsudyfguysdgfuyg")
   return (
     <View>
     
@@ -198,15 +288,17 @@ console.log(AjoutModifier)
 <TouchableOpacity style={styles.supprimerButton} onPress={SupEnregistrement}>
   <Text style={styles.buttonText}>Supprimer Récompense</Text>
 </TouchableOpacity>
+
+
       <View>
-        { state.Abonement === 0 ?(
+        { state.Abonement === 0 && paramchamps !== undefined?(
         <>
               <Text style={styles.sectionTitle}>Recompense</Text>
             <TextInput
   style={styles.input}
   placeholder="Nom de la tâche"
   keyboardType="default"
-   value={state.NomRecompense}
+  value= {state.NomRecompense }
   onChangeText={text => handleChange('NomRecompense', text)}
 />
 <Text style={styles.sectionTitle}>Description</Text>
@@ -236,7 +328,7 @@ value={state.Description}
   
   <Text style={styles.sectionTitle}>
     <Text style={styles.sectionTitle}>Description : </Text>
-    {state.recompenseDataAdmin.find(item => item.idRecompenseAdmin.toString() === state.NomRecompense)?.description}
+    {state.recompenseDataAdmin.find(item => item.idRecompenseAdmin.toString() === state.NomRecompense)?.description} 
   </Text>
 )}
 
@@ -254,19 +346,19 @@ value={state.Description}
 />
 
 <Text style={styles.sectionTitle}>Choix enfants</Text>
-            {state.playerData && state.playerData.map((item: PlayerData, index: number) => (
+{state.playerData && state.playerData.map((item: PlayerData, index: number) => (
   <TouchableOpacity style={styles.card} key={index}>
     <RNPickerSelect
-  onValueChange={(value) => handleChange('NameEnfant', value)}
-  items={state.playerData.map((item: PlayerData) => ({
-    label: item.Name,
-    value: item.idPlayer.toString(),
-  }))}
-  value={state.NameEnfant}
-  style={pickerSelectStyles}
-/>
+      onValueChange={(value) => handleChange('NameEnfant', value)}
+      items={[{
+        label: item.Name,
+        value: item.idPlayer.toString(),
+      }]}
+      value={state.NameEnfant}
+      style={pickerSelectStyles}
+    />
   </TouchableOpacity>
-))} 
+))}
             <Button title="Valider" onPress={ChampsRemplie} /> 
 
     </View >

@@ -36,7 +36,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     const fetchData = async () => {
       try {
         console.log(User);
-        const response = await fetch(`http://192.168.1.116:8082/ToutTache/${User}`, {
+        const response = await fetch(`http://172.20.10.2:8082/ToutTache/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     }
     const fetchRecompenses = async () => {
       try {
-        const response = await fetch(`http://192.168.1.116:8082/ToutRecompense/${User}`, {
+        const response = await fetch(`http://172.20.10.2:8082/ToutRecompense/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
