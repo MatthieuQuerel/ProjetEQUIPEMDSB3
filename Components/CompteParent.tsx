@@ -25,7 +25,7 @@ interface CompteParentState {}
 
 const CompteParent: React.FC<CompteParentState> = () => {
   const params = useParams();
-  const navigate = useNavigate(); // Move useNavigate inside the component
+  const navigate = useNavigate();
   const User = params.User;
   const [tasks, setTasks] = useState<Task[]>([]);
   const [recompenses, setRecompenses] = useState<Recompense[]>([]); // Utiliser le bon type pour les récompenses
@@ -36,7 +36,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     const fetchData = async () => {
       try {
         console.log(User);
-        const response = await fetch(`http://172.20.10.2:8082/ToutTache/${User}`, {
+        const response = await fetch(`http://192.168.1.116:8082/ToutTache/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     }
     const fetchRecompenses = async () => {
       try {
-        const response = await fetch(`http://172.20.10.2:8082/ToutRecompense/${User}`, {
+        const response = await fetch(`http://192.168.1.116:8082/ToutRecompense/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     padding: 14,
     marginVertical: 5,
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#F4B322',
     width: 250, 
     marginHorizontal: 5,
    
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     padding: 4, // Ajustez le padding ici pour réduire la taille de la carte
     marginVertical: 5,
     borderWidth: 2,
-    borderColor: 'blue',
+    borderColor: '#F4B322',
     width: 400, 
     marginHorizontal: 5,
     //height: 105, // Hauteur de la carte

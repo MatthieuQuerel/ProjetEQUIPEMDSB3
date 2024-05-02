@@ -16,7 +16,7 @@ const Authentification: React.FC<IProps> = () => {
     email: '',
     password: '',
   });
-
+  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
   const handleChange = (fieldName: keyof AuthentificationState, value: string) => {
@@ -48,7 +48,7 @@ const Authentification: React.FC<IProps> = () => {
           }),
         };
 
-        const response = await fetch('http://172.20.10.2:8082/Authentification', options);
+        const response = await fetch('http://192.168.1.116:8082/Authentification', options);
 
         if (response.ok) {
           const responseData = await response.json();
@@ -68,18 +68,22 @@ const Authentification: React.FC<IProps> = () => {
             navigate(`/Compte/${email}`);
           }else{
             console.log('Réponse du serveur NULLLLL:', responseData);
+            setError('Erreur lors de la tentative de connexion. Veuillez réessayer.');
             // toast.show({
             //   type: 'error',
             //   text1: responseData?.error?.message, // Le message à afficher
             // });
+      
           
           }
          
         } else {
           console.log('Erreur lors de la requête :', response.status);
+          setError('Une erreur s\'est produite. Veuillez réessayer.');
         }
       } catch (error) {
         console.error('Erreur lors de la requête  :', error);
+        setError('Une erreur s\'est produite. Veuillez réessayer.');
       }
     }
   };
@@ -107,10 +111,16 @@ const Authentification: React.FC<IProps> = () => {
 <TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
         <Text style={styles.ButtonText}>Connexion</Text>
       </TouchableOpacity>
+      {error !== '' && <Text style={styles.errorText}>{error}</Text>}
       <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
   <Text style={styles.text}>Vous n’avez pas de compte ? </Text>
   <Link to="/CreactCompte">
     <Text style={[styles.createAccountText, { color: 'orange' }]}>S'inscrire !</Text>
+  </Link>
+</TouchableOpacity>
+<TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
+  <Link to={"/PolitiqueConfidentialite"}>
+    <Text style={[styles.createAccountText, { color: 'orange' }]}>Politique de confidentialite</Text>
   </Link>
 </TouchableOpacity>
     </View>
@@ -124,6 +134,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
      alignItems: 'center',   
     padding: 16,
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10,
   },
   title: {
     fontSize: 16,
@@ -171,12 +185,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
   },
-  text: {
-    color: 'white', 
-  },
   createAccountText: {
     marginLeft: 5, 
   },
+  text: {
+    color: 'white', 
+  },
+ 
 });
 
 export default Authentification;

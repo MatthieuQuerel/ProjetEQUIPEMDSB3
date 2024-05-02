@@ -73,7 +73,6 @@ interface BarHeadProps {
 const BarHead: React.FC<BarHeadProps> = () => {
   const param = useParams();
   const User = param.User; 
-  console.log("BarHeder"+User  )
   const [showNotification, setShowNotification] = useState(false);
 
   const handleNotificationDismiss = () => {

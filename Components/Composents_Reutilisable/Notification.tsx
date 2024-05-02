@@ -25,7 +25,7 @@ const Notification: React.FC<NotificationProps> = ({ isVisible, onDismiss, User 
       if (isVisible) {
         setModalVisible(true);
         try {
-          const responseUser = await fetch(`http://172.20.10.2:8082/playerRecompenseNotification/${User}`);
+          const responseUser = await fetch(`http://192.168.1.116:8082/playerRecompenseNotification/${User}`);
           if (!responseUser.ok) {
             throw new Error('Échec de la requête pour récupérer les données de l\'utilisateur');
           }

@@ -193,20 +193,21 @@ const responseData = await response.json();
   style={pickerSelectStyles}
 />
 
-            <Text style={styles.sectionTitle}>Choix enfants</Text>
-            {state.playerData && state.playerData.map((item: PlayerData, index: number) => (
-  <TouchableOpacity style={styles.card} key={index}>
+<View>
+  <Text style={styles.sectionTitle}>Choix enfants</Text>
+  <TouchableOpacity style={styles.card}>
     <RNPickerSelect
-  onValueChange={(value) => handleChange('NameEnfant', value)}
-  items={state.playerData.map((item: PlayerData) => ({
-    label: item.Name,
-    value: item.idPlayer.toString(),
-  }))}
-  value={state.NameEnfant}
-  style={pickerSelectStyles}
-/>
+      onValueChange={(value) => handleChange('NameEnfant', value)}
+      items={state.playerData.map((item: PlayerData) => ({
+        label: item.Name,
+        value: item.idPlayer.toString(),
+      }))}
+      value={state.NameEnfant}
+      style={pickerSelectStyles}
+    />
   </TouchableOpacity>
-))}
+</View>
+
 
             <Text style={styles.sectionTitle}>Description</Text>
             <TextInput
@@ -217,7 +218,10 @@ const responseData = await response.json();
               onChangeText={text => handleChange('Description', text)}
             />
 
-            <Button title="Valider" onPress={ChampsRemplie} />
+<View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+  <Button title="Valider" onPress={ChampsRemplie} color="black" />
+</View>
+
           </React.Fragment>
         )}
         {activeTab === 2 && (
@@ -254,23 +258,25 @@ const responseData = await response.json();
     { label: 'Difficile', value: 'Difficile' },
   ]}
   value={state.Penalitee}
+  placeholder="Penalitee"
   style={pickerSelectStyles}
 />
 
-            <Text style={styles.sectionTitle}>Choix enfants</Text>
-            {state.playerData && state.playerData.map((item: PlayerData, index: number) => (
-  <TouchableOpacity style={styles.card} key={index}>
+            <View>
+  <Text style={styles.sectionTitle}>Choix enfants</Text>
+  <TouchableOpacity style={styles.card}>
     <RNPickerSelect
-  onValueChange={(value) => handleChange('NameEnfant', value)}
-  items={state.playerData.map((item: PlayerData) => ({
-    label: item.Name,
-    value: item.idPlayer.toString(),
-  }))}
-  value={state.NameEnfant}
-  style={pickerSelectStyles}
-/>
+      onValueChange={(value) => handleChange('NameEnfant', value)}
+      items={state.playerData.map((item: PlayerData) => ({
+        label: item.Name,
+        value: item.idPlayer.toString(),
+      }))}
+      value={state.NameEnfant}
+      placeholder="Choix de l'enfant"
+      style={pickerSelectStyles}
+    />
   </TouchableOpacity>
-))}
+</View>
 
             <Text style={styles.sectionTitle}>Description</Text>
             <TextInput
@@ -281,7 +287,11 @@ const responseData = await response.json();
               onChangeText={text => handleChange('Description', text)}
             />
 
-            <Button title="Valider" onPress={ChampsRemplie} />
+<View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+  <Button title="Valider" onPress={ChampsRemplie} color="black" />
+</View>
+
+
 
              </React.Fragment>
         )}
@@ -295,20 +305,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     padding: 10,
-    backgroundColor: '#eee',
+    backgroundColor: '#F4B322',
+   
   },
   tabButton: {
     padding: 10,
   },
+  buttonContainer: {
+   
+    padding: 12,
+    borderRadius: 8,
+ 
+    width: 400,
+  },
   activeTab: {
-    backgroundColor: 'lightblue',
+    backgroundColor: '#F4B322',
   },
   card: {
+    borderColor: '#F4B322',
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
+
   },
   cardPhoto: {
     width: 50,
@@ -330,10 +349,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
     marginTop: 10,
+   
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: '#F4B322',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 10,

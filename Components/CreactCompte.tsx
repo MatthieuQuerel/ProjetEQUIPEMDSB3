@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-native';
 import { TextInput, Button, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
- import { crypte } from './Composents_Reutilisable/Cryptage';
+//  import { crypte } from './Composents_Reutilisable/Cryptage';
 interface CreactCompteState {
   username: string;
   lastName: string;
@@ -29,12 +29,12 @@ const CreactCompte: React.FC = () => {
       Alert.alert("Tous les champs ne sont pas remplis");
     } else {
       try {
-       const Crypte = await  crypte(password) //crypter
-        if(Crypte != ""){
-          setState((prevState)=>({...prevState ,password:Crypte }))
-        }else{
-          alert('imposible de crypter ');
-        }
+      //  const Crypte = await  crypte(password) //crypter
+      //   if(Crypte != ""){
+      //     setState((prevState)=>({...prevState ,password:Crypte }))
+      //   }else{
+      //     alert('imposible de crypter ');
+      //   }
         const options = {
           method: 'POST',
           headers: {

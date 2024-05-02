@@ -141,12 +141,13 @@ app.post("/Authentification", async (req, res) => {
     const connection = await conection(); // Utilisez la fonction conection au lieu de conection
     const mail = req.params.mail; 
     const ValideTable = req.params.Valide;
-    const query = `SELECT Nombre_de_point,Description, Valider, Rulse, player.Name FROM rulse INNER JOIN user ON rulse.IdUser = user.idUser INNER JOIN player ON rulse.IdPlayer = player.idPlayer WHERE user.Mail = '${mail}'and Valider =${ValideTable}  `
+    const query = `SELECT Nombre_de_point,Description,type, Valider, Rulse, player.Name FROM rulse INNER JOIN user ON rulse.IdUser = user.idUser INNER JOIN player ON rulse.IdPlayer = player.idPlayer WHERE user.Mail = '${mail}'and Valider =${ValideTable}  `
     try {
       const data = await executerequete(connection, query);
       const rulse = data.map((rulse) => ({
         point: rulse.Nombre_de_point,
         Description: rulse.Description,
+        temporellement:rulse.type === 1 ? "souvent" : "une fois",
         Valider: rulse.Valider,
         Rulse: rulse.Rulse,
         Name: rulse.Name,
@@ -239,7 +240,7 @@ return res.json(RulseAcceil);
   app.get("/Avatar/:mail", async(req, res) => {
     const connection = await conection(); // Utilisez la fonction conection au lieu de conection
     const mail = req.params.mail;
-    const query = `SELECT avatar.Nom , player.Name,idPlayer,user.Mail FROM player INNER JOIN user ON player.IdUser = user.idUser INNER JOIN avatar ON player.idAvatard = avatar.idAvatard WHERE user.Mail = '${mail}'`
+    const query = `SELECT  player.Name,idPlayer,user.Mail FROM player INNER JOIN user ON player.IdUser = user.idUser WHERE user.Mail = '${mail}'`
     try {
       const data = await executerequete(connection, query);
       console.log("back data");
@@ -346,10 +347,11 @@ app.delete("/SupresionTache/:mail", async (req, res) => {
     
     const query = `SELECT player.Point, player.Name, 
     COUNT(CASE WHEN rulse.Valider = 1 THEN 1 END) AS count_valider_1, 
-    COUNT(CASE WHEN rulse.Valider = 0 THEN 1 END) AS count_valider_0 
+    COUNT(CASE WHEN rulse.Valider = 0 THEN 1 END) AS count_valider_0,
+    player.idPlayer
 FROM player 
-INNER JOIN user ON player.IdUser = user.idUser 
-INNER JOIN rulse ON rulse.IdPlayer = player.idPlayer 
+left JOIN user ON player.IdUser = user.idUser 
+left JOIN rulse ON rulse.IdPlayer = player.idPlayer 
 WHERE user.Mail = '${mail}' 
 GROUP BY player.Point, player.Name;`
   
@@ -360,6 +362,7 @@ GROUP BY player.Point, player.Name;`
         Name: rulse.Name,
         Valider1: rulse.count_valider_1,
         Valider0: rulse.count_valider_0,
+        IdPlayer: rulse.idPlayer,
         
         //IMG: rulse.IMG,
       }));
@@ -525,7 +528,7 @@ app.get("/RecompenseAdmin", async(req, res) => {
 /////////////////////////////////////Ajouter récompense ////////////////////////////////////////////
 app.post("/AjoutRecompense/:mail", async(req, res) => {
   
-  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const connection = await conection(); 
   const Mail = req.params.mail;
   const recompenseData = req.body;
   const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${recompenseData.IDPlayer}'`;
@@ -543,7 +546,7 @@ app.post("/AjoutRecompense/:mail", async(req, res) => {
 
 if (recompenseData.Abonement === 0){
   queryAbonement = `INSERT IGNORE INTO recompense (users, Players, Recompense, Abonnement, RecompenseAdmin, Point, Description,DateCreation) VALUES ('${idUsers}', '${recompenseData.IDPlayer}', '${recompenseData.NomRecompense}', '${recompenseData.Abonement}', NULL, '${recompenseData.Point}', '${recompenseData.Description}','${DateCreation}')`
- console.log("je vais dans bonement standerd")
+ 
 }else{
   queryAbonement = `INSERT IGNORE INTO recompense (users, Players, Recompense, Abonnement, RecompenseAdmin, Point, Description,DateCreation) VALUES ('${idUsers}', '${recompenseData.IDPlayer}', NULL, '${recompenseData.Abonement}', '${recompenseData.NomRecompense}', '${recompenseData.Point}', NULL ,'${DateCreation}')`
 }
@@ -574,13 +577,7 @@ app.put("/Modification/:mail", async (req, res) => {
   const jour = currentDate.getDate();
   const DateCreation = `${années}-${mois}-${jour}`;
   const { IDPlayer, NomRecompense, Abonement, Point, Description,ID } = req.body;
-  console.log(DateCreation)
-  console.log(NomRecompense)
-  console.log(Abonement)
-  console.log(Description)
-  console.log(IDPlayer)
-  console.log(Point)
-  console.log(ID)
+  
   const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${IDPlayer}'`;
   const dataIdUser = await executerequete(connection, queryIdUser);
   const idUsers = dataIdUser[0].IdUser;
@@ -719,6 +716,201 @@ app.post('/Abonnement/:mail', async (req, res) => {
 //   }
 // });
 
+
+
+
+/////////////////////////////////////////////Partie Enfant ///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////Afficher enfant ////////////////////////////////////////////////////////////////////////
+app.get("/AfficherModification/:id", async (req, res) => {
+  const connection = await conection(); 
+
+  const idPlayer = req.params.id;
+ console.log("idPlayer : "+ idPlayer)
+  const queryPlayer = `SELECT Name,TypePersone,Point,Age FROM player WHERE idPlayer = '${idPlayer}'`;
+
+  const dataIdPlayer = await executerequete(connection, queryPlayer);
+  console.log(dataIdPlayer)
+  if(dataIdPlayer !== undefined || dataIdPlayer !== null){
+
+    const ModifPlayer = dataIdPlayer.map((Modifplayer) => ({
+      name: Modifplayer.Name,
+      typePersone: Modifplayer.TypePersone,
+      age : Modifplayer.Age ,
+      point : Modifplayer.Point ,
+    }));
+  
+    return res.status(200).json(ModifPlayer);
+    
+  } else {
+    res.status(500).json({ error: 'récompense non ajoutée' })
+  }
+})
+
+///////////////////////////////////////////////Suprimer enfant ///////////////////////////////////////////////////////////
+
+app.delete("/SupresionEnfant/:mail", async (req, res) => {
+  try {
+    const Mail = req.params.mail;
+      const idToDelete = req.body.id; 
+    const connection = await conection();
+    if(idToDelete > 0){
+     
+    const query =`DELETE FROM player WHERE idPlayer = '${idToDelete}'`;
+    await executerequete(connection, query);
+      return res.json({ message: "Supréssion player réussie"});
+    }else{
+      return res.json({ message: "Supréssion player échoué"});
+    }
+ 
+  } catch (error) {
+    console.error("Error sup:", error);
+    res.status(500).json({ error: 'Error sup.' });
+  }
+    
+})
+
+///////////////////////////////////////////////////Ajouter Enfant /////////////////////////////////////////////////////////////////
+app.post("/AjoutEnfant/:mail", async(req, res) => {
+  const connection = await conection(); 
+
+  const Mail = req.params.mail;
+  console.log(Mail)
+  const Player = req.body;
+  const queryIdUser = `SELECT idUser FROM user WHERE Mail = '${Mail}'`;
+  const dataIdUser = await executerequete(connection, queryIdUser);
+
+  const idUsers = dataIdUser[0].idUser;
+  console.log(idUsers)
+  const queryplayer = `INSERT IGNORE INTO player (IdUser, Name, TypePersone, Point, idAvatard, Age) VALUES ('${idUsers}', '${Player.Name}', '${Player.TypePersone}', '${Player.Point}', 0, '${Player.Age}')`
+  
+  try {
+    console.log(queryplayer)
+    const data = await executerequete(connection, queryplayer); 
+    console.log(data)
+    if(data !== undefined || data !== null){
+      return res.status(200).json({message:"Enfant ajoutée"})
+    } else {
+      res.status(500).json({ error: 'Enfant non ajoutée' })
+    }
+  } catch (error) {
+    console.log("Requête impossible", error)
+    res.status(500).json({ error: 'Erreur interne du serveur' })
+  }
+  
+})
+
+
+////////////////////////////////////Modifier Enfant //////////////////////////////////////////
+app.put("/ModificationEnfant/:id", async (req, res) => {
+  const connection = await conection(); // Assurez-vous que cette fonction est correctement définie
+  const IDPlayer = req.params.id;
+  console.log(IDPlayer);
+  
+  const { ID, Name, Age, Point, TypePersone } = req.body;
+  
+  const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${IDPlayer}'`;
+  const dataIdUser = await executerequete(connection, queryIdUser);
+  const idUsers = dataIdUser[0].IdUser;
+  console.log(idUsers);
+  
+  let query = `
+      UPDATE player 
+      SET 
+      idPlayer = '${ID}', 
+      IdUser = '${idUsers}', 
+      Name = '${Name}',  
+      Point = '${Point}', 
+      TypePersone = '${TypePersone}', 
+      Age = '${Age}'
+      WHERE idPlayer = '${IDPlayer}'`;
+     
+  try {
+    await executerequete(connection, query);
+    return res.json({ message: "Mise à jour Recompense réussie" });
+  } catch (error) {
+    console.log("Requête impossible", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+////////////////////////////////////afficher enfant Bouton ////////////////////////////////////////
+app.get("/Afficherenfant/:mail", async (req, res) => {
+  try {
+    const connection = await conection(); 
+
+    const Mail = req.params.mail;
+    console.log(Mail);
+    const queryIdUser = `SELECT idUser FROM user WHERE Mail = '${Mail}'`;
+    const dataIdUser = await executerequete(connection, queryIdUser);
+    const idUsers = dataIdUser[0].idUser;
+  
+    const queryPlayer = `SELECT Name, idPlayer FROM player WHERE IdUser = '${idUsers}'`;
+    const dataIdPlayer = await executerequete(connection, queryPlayer);
+    
+    if (dataIdPlayer.length > 0) {
+      const AfficherPlayer = dataIdPlayer.map((Afficherplayer) => ({
+        name: Afficherplayer.Name,
+        idplayer: Afficherplayer.idPlayer,
+      }));
+  
+      return res.status(200).json(AfficherPlayer);
+    } else {
+      return res.status(404).json({ error: 'Aucun joueur trouvé pour cet utilisateur' });
+    }
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données du joueur :', error);
+    return res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+/////////////////////////////////////////afficher tache du player////////////////////////////////////////////
+app.get("/AfficherDeEnfant/:mail/:id",async(req,res) => {
+
+  
+  const Mail = req.params.mail;
+  const Id = req.params.id;
+  const connection = await conection();
+  
+  const query = `SELECT idRulse,player.Name, Rulse, type, Nombre_de_point FROM rulse INNER JOIN player ON rulse.IdPlayer = player.idPlayer INNER JOIN user ON rulse.IdUser= user.idUser WHERE user.Mail = '${Mail}' and player.idPlayer = '${Id}'and Valider = '0'  ORDER BY rulse.DateCreation`
+  try {
+
+  const data =   await executerequete(connection,query)
+
+const RulseAcceil = data.map((RulseAcceil) => ({
+Point: RulseAcceil.Nombre_de_point,
+temporellement:RulseAcceil.type === 1 ? "souvent" : "une fois",
+Rulse: RulseAcceil.Rulse,
+Name: RulseAcceil.Name,
+Description: RulseAcceil.Description,
+idRulse: RulseAcceil.idRulse,
+}));
+console.log(RulseAcceil)
+return res.json(RulseAcceil);
+}catch(error){
+  console.log("Error d'envoie erreur ")
+  res.status(500).json({ error: 'Une erreur est survenue lors de la l afichage des tache.'});
+}
+})
+///////////////////////////////////////////////////////////Valider tache de l enfant /////////////////////////////////////////////////////////////
+app.put("/ValiderTache/:idRulse", async (req, res) => {
+  const connection = await conection(); // Assurez-vous que cette fonction est correctement définie
+  const idRulse = req.params.idRulse;
+
+  try {
+    // Mettre à jour le champ `modifier` dans la table `rulse` pour l'enregistrement avec l'ID spécifié
+    const query = `
+      UPDATE rulse 
+      SET Valider = 1
+      WHERE idRulse = '${idRulse}'`;
+
+    await executerequete(connection, query);
+    return res.json({ message: "Mise à jour réussie" });
+  } catch (error) {
+    console.error("Requête impossible :", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.listen(port, () => {
     console.log('Le serveur est en cours d\'exécution sur http://192.168.1.116:'+port);

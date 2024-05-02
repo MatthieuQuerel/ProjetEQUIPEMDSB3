@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Button, ActivityIndicator,TouchableOpacity } from 'react-native';
 import { CardField, useStripe } from '@stripe/stripe-react-native';
-import { useParams } from 'react-router-dom'; 
+import { useParams,Link } from 'react-router-dom'; 
 
 const Paiement = () => {
   const params = useParams();
@@ -104,6 +104,12 @@ const Paiement = () => {
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
       <Button title={loading ? 'Chargement...' : 'Valider'} disabled={loading} onPress={handleSubmit} />
       {errorMessage && <Text>{errorMessage}</Text>}
+
+      <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
+  <Link to={`/Compte/${params.User}/CompteParent/Recompense/CGV`}>
+    <Text style={[styles.createAccountText, { color: 'orange' }]}>CGV</Text>
+  </Link>
+</TouchableOpacity>
     </View>
   );
 };
@@ -122,6 +128,14 @@ const styles = StyleSheet.create({
     cardField: {
       width: '100%',
       height: 50,
+    },
+    createAccountButton: {
+      marginTop: 16,
+      flexDirection: 'row', 
+      alignItems: 'center', 
+    },
+    createAccountText: {
+      marginLeft: 5, 
     },
   });
 

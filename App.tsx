@@ -4,15 +4,19 @@ import { NativeRouter, Routes, Route } from 'react-router-native';
 import Compte from './Components/Compte';
 import Authentification from './Components/Authentification';
 import CreactCompte from './Components/CreactCompte';
+import PolitiqueConfidentialite from './Components/Politiqueconfidentialite';
+import CGV from './Components/CGV';
 import CompteEnfant from './Components/CompteEnfant';
 import CompteParent from './Components/CompteParent';
 import AjouterTache from './Components/AjouterTache';
 import Profils from './Components/Profils';
 import Prenium from './Components/Premium';
+import ValiderTacheEnfant from './Components/ValiderTacheEnfant';
 import Stats from './Components/Stats';
 import ModifierProfil from './Components/ModifierProfil';
 import Tache from './Components/Tache';
 import OngleAjouterRecompense from './Components/Composents_Reutilisable/OngletAjoueRecompence';
+import AjouterEnfant from './Components/AjouterEnfant';
 import { StripeProvider } from '@stripe/stripe-react-native';
 import Erreur from './Components/Erreur';
 import Toast from 'react-native-toast-message';
@@ -28,13 +32,17 @@ export default function App() {
         <NativeRouter>
           <Routes>
             <Route path="/" element={<Authentification />} />
+            <Route path="/PolitiqueConfidentialite" element={<PolitiqueConfidentialite />} />
             <Route path="/CreactCompte" element={<CreactCompte />} />
             <Route path="/Compte/:User" element={<Compte />} />
             <Route path="/Compte/:User/CompteEnfant" element={<CompteEnfant />} />
+            <Route path="/Compte/:User/CompteEnfant/:id/ValiderTacheEnfant" element={<ValiderTacheEnfant />} />
             <Route path="/Compte/:User/CompteParent" element={<CompteParent />} />
             <Route path="/Compte/:User/CompteParent/Profils" element={<Profils />} />
+            <Route path="/Compte/:User/CompteParent/Profils/AjouterEnfant/:id" element={<AjouterEnfant />} />
             <Route path="/Compte/:User/CompteParent/Profils/ModifierProfil" element={<ModifierProfil />} />
             <Route path="/Compte/:User/CompteParent/Recompense" element={<Prenium />} />
+            <Route path="/Compte/:User/CompteParent/Recompense/CGV" element={<CGV />} />
             <Route path="/Compte/:User/CompteParent/Prenium/AjouterRecompense/:AjoueModification/:Abonement/:paramTab/:ID" element={<OngleAjouterRecompense />} />
             <Route path="/Compte/:User/CompteParent/Tache" element={<Tache />} />
             <Route path="/Compte/:User/CompteParent/Tache/AjouterTache" element={<AjouterTache />} />

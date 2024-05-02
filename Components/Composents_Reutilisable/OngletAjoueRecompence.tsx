@@ -71,7 +71,7 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
     setAjoutModifier(false);
   }
    
-    console.log('AjoueModifications si a 1:', ModificationValue);
+    //console.log('AjoueModifications si a 1:', ModificationValue);
     
   
     if (cleanParamTab !== "" && ModificationValue === '1' ) {
@@ -83,7 +83,14 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
         if (abonementString !== undefined) {
            Abonementvaleur = abonementString.split('=')[1].trim();
            }
-        if(Abonementvaleur === 0){
+           console.log("cleanParamTab",cleanParamTab)
+           console.log("Abonementvaleur",Abonementvaleur)
+        if(Abonementvaleur === '0'){
+//           console.log("///////////////////////////////////////////////////////////////")
+// enlevé le + de ma chaine 
+paramchamps.Recompense = paramchamps.Recompense.replace(/\+/g, ' ');
+paramchamps.Description = paramchamps.Description.replace(/\+/g, ' ');
+// asignez les valeurs selon si c'est prenium ou non 
         if (state.Point !== paramchamps.Point || 
             state.NomRecompense !== paramchamps.Recompense || 
             state.Description !== paramchamps.Description || 
@@ -95,6 +102,7 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
             Description: paramchamps.Description,
             NameEnfant: paramchamps.idEnfant,
           }));
+        
         }
       }else{
         if (state.Point !== paramchamps.Point || 
@@ -110,7 +118,7 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
       }
       }
         
-        console.log(state.NomRecompense);
+       
       } catch (error) {
         console.error('Erreur lors de l\'analyse de paramchamps :', error);
       }
@@ -120,8 +128,6 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
   }
   
   // Appelez la fonction AfficherValeurModifier
-  console.log(ModifierValeurModifier +" test ModifierValeurModifier")
-  console.log(ID +" test ID" )
   if(ModifierValeurModifier && ID !=""){
     AfficherValeurModifier();
     setModifierValeurModifier(false)
@@ -137,7 +143,6 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
    
     if (abonementString !== undefined) { 
       const valeurAbonement = abonementString.split('=')[1].trim();
-      console.log(" valeurAbonement : " + valeurAbonement);
     
       if (valeurAbonement === '1') {
         console.log("je fuis dans le true");
@@ -165,16 +170,15 @@ const OngletAjoueRecompense: React.FC<OngletAjoueRecompenseProps> = () => {
       try {
         console.log(User)
         if (User) {
-          console.log("dans le users")
 
           const responseUser = await fetch(`http://192.168.1.116:8082/Avatar/${User}`);
           console.log(responseUser)
           if (!responseUser.ok) {
             throw new Error('Échec de la requête pour récupérer les données de l\'utilisateur');
           }
-          console.log("recuperation enfant")
+        
           const userData = await responseUser.json();
-          console.log(userData)
+       
           setState(prevState => ({ ...prevState, playerData: userData }));
          
         }
@@ -205,8 +209,10 @@ console.log(AjoutModifier)
         let URL;
         let method;
 console.log("AjoueModification : "+AjoueModification)
+console.log("ModificationValue : "+ModificationValue)
+console.log("IDCard : "+IDCard)
 
-if (AjoueModification === '1' && IDCard !== '') {
+if (ModificationValue === '1' && IDCard !== '') {
   URL = `http://192.168.1.116:8082/Modification/${User}`;
   method = 'PUT';
 
@@ -216,7 +222,7 @@ if (AjoueModification === '1' && IDCard !== '') {
 }
 console.log(URL);
 
-console.log(state.Abonement+ "Abonement");
+
 
 const response = await fetch(URL, {
   method: method,
@@ -234,7 +240,7 @@ const response = await fetch(URL, {
  
 });
 
-console.log(response);
+
 
 if (response.ok) {
   console.log('Envoi avec succès');
@@ -254,7 +260,7 @@ if (response.ok) {
   const SupEnregistrement = async () => {
     try {
        //const IDs = 11// remetre ID
-     if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== '') {
+     if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== ''&& IDCard !== '' ) {
         const options = {
           method: 'DELETE', 
           headers: {
@@ -271,13 +277,15 @@ if (response.ok) {
           console.log('Suppression avec succès');
           navigate(`/Compte/${param.User}/CompteParent/Recompense`)
         }
+      }else{
+        alert('les champs ne sont pas remplis')
       }
     } catch (error) {
       console.error('champs non remplie')
     }
   };
   
-console.log(AjoutModifier + "gffffffffffffffffffffffdffuysgfuydsgyfgsduygfuysdguyfgsuydgfuygsduyfguysdgfuyfgsudygfuygsduygsudyfguysdgfuyg")
+
   return (
     <View>
     
@@ -320,6 +328,7 @@ value={state.Description}
     value: item.idRecompenseAdmin.toString(),
   }))}
   value={state.NomRecompense}
+  placeholder="Récompense"
   style={pickerSelectStyles}
 />
 
@@ -345,6 +354,24 @@ value={state.Description}
   onChangeText={text => handleChange('Point', text)}
 />
 
+
+<View>
+  <Text style={styles.sectionTitle}>Choix enfants</Text>
+  <TouchableOpacity style={styles.card}>
+    <RNPickerSelect
+      onValueChange={(value) => handleChange('NameEnfant', value)}
+      items={state.playerData.map((item: PlayerData) => ({
+        label: item.Name,
+        value: item.idPlayer.toString(),
+      }))}
+      value={state.NameEnfant}
+      placeholder="Choix de l'enfant"
+      style={pickerSelectStyles}
+    />
+  </TouchableOpacity>
+</View>
+
+{/* <View>
 <Text style={styles.sectionTitle}>Choix enfants</Text>
 {state.playerData && state.playerData.map((item: PlayerData, index: number) => (
   <TouchableOpacity style={styles.card} key={index}>
@@ -354,11 +381,13 @@ value={state.Description}
         label: item.Name,
         value: item.idPlayer.toString(),
       }]}
+      placeholder="Choix de l'enfant"
       value={state.NameEnfant}
       style={pickerSelectStyles}
     />
   </TouchableOpacity>
 ))}
+</View> */}
             <Button title="Valider" onPress={ChampsRemplie} /> 
 
     </View >
