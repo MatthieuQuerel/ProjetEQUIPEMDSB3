@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import { LinearGradient } from 'expo-linear-gradient';
 
 interface OngletAjouterTacheProps {
   user?: string;
@@ -50,7 +51,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://192.168.1.116:8082/Avatar/${user}`, {
+      fetch(`http://10.54.90.21:8082/Avatar/${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +118,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
           }), 
         };
         
-        const response = await fetch(`http://192.168.1.116:8082/TacheAjoue`, options);///Compte/${user}/CompteParent/Tache
+        const response = await fetch(`http://10.54.90.21:8082/TacheAjoue`, options);///Compte/${user}/CompteParent/Tache
 
 const responseData = await response.json();
         if (responseData !="") {
@@ -218,9 +219,14 @@ const responseData = await response.json();
               onChangeText={text => handleChange('Description', text)}
             />
 
-<View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+{/* <View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
   <Button title="Valider" onPress={ChampsRemplie} color="black" />
-</View>
+</View> */}
+<TouchableOpacity style={styles.button} onPress={ChampsRemplie}>
+      <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
+                    <Text style={styles.buttonText}>Valider</Text>
+                 </LinearGradient>
+      </TouchableOpacity>
 
           </React.Fragment>
         )}
@@ -286,13 +292,14 @@ const responseData = await response.json();
               value={state.Description}
               onChangeText={text => handleChange('Description', text)}
             />
-
-<View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+      <TouchableOpacity style={styles.button} onPress={ChampsRemplie}>
+      <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
+                    <Text style={styles.buttonText}>Valider</Text>
+                 </LinearGradient>
+      </TouchableOpacity>
+{/* <View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
   <Button title="Valider" onPress={ChampsRemplie} color="black" />
-</View>
-
-
-
+</View> */}
              </React.Fragment>
         )}
       </View>
@@ -308,6 +315,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F4B322',
    
   },
+  linearGradient: {
+    width: 410,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+  },
   tabButton: {
     padding: 10,
   },
@@ -317,6 +331,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
  
     width: 400,
+  },
+  buttonText: {
+    fontSize: 24,
+    color: '#FFFF',
+  },
+  button: {
+    marginTop: 10,
+    width: '100%',
+    height: 80,
+    backgroundColor: 'black', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 1, 
+    borderColor: 'orange', 
   },
   activeTab: {
     backgroundColor: '#F4B322',

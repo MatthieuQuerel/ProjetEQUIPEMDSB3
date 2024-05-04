@@ -1,21 +1,21 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Link } from 'react-router-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Importer LinearGradient depuis expo-linear-gradient
 
-interface ButtonNav {
+interface ButtonNavProps {
   name: string;
   chemin: string;
-
 }
 
-const ButtonNav: React.FC<ButtonNav> = ({ name, chemin }) => (
- 
+const ButtonNav: React.FC<ButtonNavProps> = ({ name, chemin }) => (
   <TouchableOpacity style={styles.button} onPress={() => console.log(`${name} clicked`)}>
     <Link to={chemin}>
-      <Text style={styles.buttonText}>{name}</Text>
+      <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
+        <Text style={styles.buttonText}>{name}</Text>
+      </LinearGradient>
     </Link>
   </TouchableOpacity>
-  
 );
 
 const styles = StyleSheet.create({
@@ -23,16 +23,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     height: 80,
-    backgroundColor: 'black', 
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    borderWidth: 1, 
-    borderColor: 'orange', 
+    borderWidth: 1,
+    borderColor: 'orange',
+  },
+  linearGradient: {
+    width: 400,
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
   },
   buttonText: {
-    fontSize: 24, 
-    color: 'orange',
+    fontSize: 24,
+    color: '#FFFF',
   },
 });
 

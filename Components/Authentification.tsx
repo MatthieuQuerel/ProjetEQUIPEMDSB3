@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput,Image, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link, useNavigate } from 'react-router-native';
 // import { comparer } from './Composents_Reutilisable/Cryptage';
 
@@ -48,7 +48,7 @@ const Authentification: React.FC<IProps> = () => {
           }),
         };
 
-        const response = await fetch('http://192.168.1.116:8082/Authentification', options);
+        const response = await fetch('http://10.54.90.21:8082/Authentification', options);
 
         if (response.ok) {
           const responseData = await response.json();
@@ -90,6 +90,7 @@ const Authentification: React.FC<IProps> = () => {
 
   return (
     <View style={styles.container}>
+      <Image  source={require('../assets/Logo.png')} style={styles.logo} />
       <Text style={styles.title}>Connexion au compte</Text>
       <TextInput
         style={styles.input}
@@ -129,11 +130,15 @@ const Authentification: React.FC<IProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: '#FAFA',
     flex: 2,
     justifyContent: 'center',
      alignItems: 'center',   
     padding: 16,
+  },
+  logo: {
+    width: 120,
+    height: 40,
   },
   errorText: {
     color: 'red',
@@ -143,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
     marginBottom: 20,
-    color: '#FAFAFA',
+    color: '#EB4651',
     width: 168,
     height: 40,
     top: 3,
@@ -166,7 +171,7 @@ const styles = StyleSheet.create({
   },
   Button: {  
     marginTop: 16,
-    backgroundColor: 'black', 
+    backgroundColor: '#EB4651', 
     borderRadius: 8, 
     paddingVertical: 8, 
     paddingHorizontal: 10, 
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
   },
   
   ButtonText: {
-    color: 'orange', 
+    color: '#F4B322', 
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
     marginLeft: 5, 
   },
   text: {
-    color: 'white', 
+    color: '#EB4651', 
   },
  
 });

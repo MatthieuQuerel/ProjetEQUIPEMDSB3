@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-native';
-import { TextInput, Button, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-//  import { crypte } from './Composents_Reutilisable/Cryptage';
+import { TextInput, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+
 interface CreactCompteState {
   username: string;
   lastName: string;
@@ -29,12 +28,6 @@ const CreactCompte: React.FC = () => {
       Alert.alert("Tous les champs ne sont pas remplis");
     } else {
       try {
-      //  const Crypte = await  crypte(password) //crypter
-      //   if(Crypte != ""){
-      //     setState((prevState)=>({...prevState ,password:Crypte }))
-      //   }else{
-      //     alert('imposible de crypter ');
-      //   }
         const options = {
           method: 'POST',
           headers: {
@@ -48,7 +41,7 @@ const CreactCompte: React.FC = () => {
           }),
         };
 
-        const response = await fetch('http://172.20.10.2:8082/CreactCompte', options);
+        const response = await fetch('http://10.54.90.21:8082/CreactCompte', options);
 
         if (response.ok) {
           console.log('Envoi avec succès');
@@ -100,26 +93,43 @@ const CreactCompte: React.FC = () => {
         placeholderTextColor="#F4B322"
         secureTextEntry
       />
-<View style={styles.signupButton}>
-  <Button title="Inscription" onPress={ChampsRemplie} />
-</View>
+      <TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
+        <Text style={styles.ButtonText}>Inscription</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: '#FFFF',
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 14,
   },
+  Button: {  
+    marginTop: 16,
+    backgroundColor: '#EB4651', 
+    borderRadius: 8, 
+    paddingVertical: 8, 
+    paddingHorizontal: 10, 
+    alignItems: 'center', 
+    borderColor: 'white',
+    borderWidth: 1, 
+  },
+  
+  ButtonText: {
+    color: '#F4B322', 
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  
   title: {
     fontSize: 16,
     fontWeight: '800',
     marginBottom: 20,
-    color: '#FAFAFA',
+    color: '#EB4651',
     width: 168,
     height: 40,
     top: 3,
@@ -132,7 +142,8 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: '#F4B322',
-    color: '#F4B322',
+    color: '#EB4651',
+    backgroundColor: '#FFFF',
     borderWidth: 1,
     borderRadius: 8, 
     marginBottom: 16,
@@ -140,28 +151,14 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   signupButton: {
-    backgroundColor: 'black',
+    
     color: 'orange',
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderRadius: 8,
     marginTop: 20,
   },
-  Button: {
-    marginTop: 16,
-    backgroundColor: 'black', 
-    borderRadius: 8, 
-    paddingVertical: 8, 
-    paddingHorizontal: 10, 
-    alignItems: 'center', 
-    borderColor: 'white',
-    borderWidth: 1, 
-  },
-  ButtonText: {
-    color: 'orange', 
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+ 
   createAccountButton: {
     position: 'absolute',
     top: 20,
@@ -177,11 +174,12 @@ const styles = StyleSheet.create({
     borderColor: 'white',
   },
   createAccountText: { 
-    color: 'black', 
+    color: '#EB4651', 
   },
 });
 
 export default CreactCompte;
+
 
 
 // CreactCompteState et IProps: Ces sont des interfaces TypeScript qui définissent les types pour l'état (CreactCompteState) et les propriétés (IProps) du composant.

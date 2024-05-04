@@ -5,6 +5,8 @@ import NavBar from "./Composents_Reutilisable/Nav";
 import ButtonNav from "./Composents_Reutilisable/Button";
 import { useNavigate } from 'react-router-native';
 import Svg, { Path, Rect } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
+
 interface ModifierProfilProps {};
 
 const ModifierProfil: React.FC<ModifierProfilProps> = () => {
@@ -19,7 +21,7 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://192.168.1.116:8082/Profils/${params.User}`);
+                const response = await fetch(`http://10.54.90.21:8082/Profils/${params.User}`);
                 if (!response.ok) {
                     throw new Error('Échec de la requête');
                 }
@@ -39,7 +41,7 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
     const handleSave = async () => {
         try {
             console.log("Saving data: ", { name, lastname, mail, password }); // Ajoutez ce log pour afficher les données à envoyer
-            const response = await fetch(`http://192.168.1.116:8082/Profils/${params.User}/Modification`, {
+            const response = await fetch(`http://10.54.90.21:8082/Profils/${params.User}/Modification`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,16 +116,24 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
                 ))}
             </View>
             <View style={[styles.ButtonChamps]}> 
-            <TouchableOpacity onPress={handleSave}>
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
                 <Text style={styles.buttonNavigation}>Enregistrer</Text>
+                </LinearGradient> 
             </TouchableOpacity>
             
-            <TouchableOpacity onPress={() => navigate(`/`)}>     
+            <TouchableOpacity style={styles.button} onPress={() => navigate(`/`)}>    
+            <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
             <Text style={styles.buttonNavigation} >Déconnexion</Text>
+            </LinearGradient> 
             </TouchableOpacity>
-            <TouchableOpacity  onPress={() => navigate(`/Compte/${params.User}`)}>
+            
+            <TouchableOpacity style={styles.button} onPress={() => navigate(`/Compte/${params.User}`)}>
+            <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
                 <Text style={styles.buttonNavigation}>Compte</Text>
+                </LinearGradient>  
             </TouchableOpacity>
+            
             </View>
             <View style={styles.navBarContainer}>
             <NavBar />
@@ -135,10 +145,17 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop : 50,
+        paddingTop : 40,
         
         justifyContent: 'center',
     },
+    linearGradient: {
+        width: 100,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+      },
     iconButton: {
         flexDirection: 'row',
         alignItems: 'flex-start', // Aligne les éléments au début
@@ -147,18 +164,31 @@ const styles = StyleSheet.create({
     icon: {
         marginRight: 10, // Ajoute de la marge à droite de l'icône
     },
-    
+    button: {
+        marginTop: 5,
+        width: 100,
+        height: 50,
+        backgroundColor: 'black', 
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+        borderWidth: 1, 
+        borderColor: '#FAB322', 
+      },
+
     navBarContainer: {
         width: '100%', // Utilisation de la largeur totale disponible
         flexDirection: 'row', // Pour aligner les éléments horizontalement
         justifyContent: 'space-between', // Pour répartir l'espace entre les éléments
-       paddingTop : 70,
-        backgroundColor: '#0A0700', // Couleur de fond de la barre de navigation
+       paddingTop : 90,
+        
         alignItems: 'center', // Pour aligner les éléments verticalement au centre
     },
     title: {
-        fontSize: 24,
-        marginBottom: 20,
+        fontSize: 14,
+        
+      
+    color: '#FFFF',
     },
     inputsContainer: {
         width: '100%',
@@ -203,23 +233,27 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
     },
-    button: {
-        backgroundColor: '#4CAF50',
-        padding: 10,
-        color: 'white',
-        textAlign: 'center',
-        margin: 10,
-        borderRadius: 5,
-        width: '100%',
-    },
+    // button: {
+    //     backgroundColor: '#4CAF50',
+    //     padding: 10,
+    //     color: 'white',
+    //     textAlign: 'center',
+    //     margin: 10,
+    //     borderRadius: 5,
+    //     width: '100%',
+    // },
+    // buttonNavigation: {
+    //     backgroundColor: '#0A0700',
+    //     padding: 10,
+    //     color: '#F4B322',
+    //     textAlign: 'center',
+    //     margin: 10,
+    //     borderRadius: 5,
+    //     width: 150,
+    // },
     buttonNavigation: {
-        backgroundColor: '#0A0700',
-        padding: 10,
-        color: '#F4B322',
-        textAlign: 'center',
-        margin: 10,
-        borderRadius: 5,
-        width: 150,
+        fontSize: 14,
+        color: '#FFFF',
     },
 });
 

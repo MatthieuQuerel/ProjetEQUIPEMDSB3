@@ -36,7 +36,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     const fetchData = async () => {
       try {
         console.log(User);
-        const response = await fetch(`http://192.168.1.116:8082/ToutTache/${User}`, {
+        const response = await fetch(`http://10.54.90.21:8082/ToutTache/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     }
     const fetchRecompenses = async () => {
       try {
-        const response = await fetch(`http://192.168.1.116:8082/ToutRecompense/${User}`, {
+        const response = await fetch(`http://10.54.90.21:8082/ToutRecompense/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -91,11 +91,22 @@ const CompteParent: React.FC<CompteParentState> = () => {
       {errorTache && <Text style={{ color: 'red' }}>{errorTache}</Text>}
       <ScrollView horizontal={true}>
   {tasks.map((task, index) => (
-    <View key={index} style={[styles.cardHorizontale, { backgroundColor: index % 2 === 0 ? '#F4B322' : '#0A0700' }]}>
+    <View key={index} style={[styles.cardHorizontale, { backgroundColor: index % 2 === 0 ? '#FFFF' : '#EB4651' }]}>
       <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Rulse}</Text>
       <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Name}</Text>
       <View style={[styles.row, styles.bottom]}>
+      <View style={styles.iconTextContainer}>
+      {index % 2 === 1 ? (
+               <Svg width="16" height="15" viewBox="0 0 16 15" fill="none">
+               <Path d="M8 0.75C10.4883 0.75 12.7852 2.08984 14.043 4.25C15.3008 6.4375 15.3008 9.08984 14.043 11.25C12.7852 13.4375 10.4883 14.75 8 14.75C5.48438 14.75 3.1875 13.4375 1.92969 11.25C0.671875 9.08984 0.671875 6.4375 1.92969 4.25C3.1875 2.08984 5.48438 0.75 8 0.75ZM7.34375 4.03125V7.75C7.34375 7.96875 7.45312 8.1875 7.61719 8.29688L10.2422 10.0469C10.543 10.2656 10.9531 10.1836 11.1719 9.88281C11.3633 9.58203 11.2812 9.17188 10.9805 8.95312L8.65625 7.42188V4.03125C8.65625 3.67578 8.35547 3.375 8 3.375C7.61719 3.375 7.34375 3.67578 7.34375 4.03125Z" fill="#F4B322"/>
+                </Svg>
+                  ) : (
+              <Svg width="16" height="15" viewBox="0 0 16 15" fill="none">
+              <Path d="M8 0.75C10.4883 0.75 12.7852 2.08984 14.043 4.25C15.3008 6.4375 15.3008 9.08984 14.043 11.25C12.7852 13.4375 10.4883 14.75 8 14.75C5.48438 14.75 3.1875 13.4375 1.92969 11.25C0.671875 9.08984 0.671875 6.4375 1.92969 4.25C3.1875 2.08984 5.48438 0.75 8 0.75ZM7.34375 4.03125V7.75C7.34375 7.96875 7.45312 8.1875 7.61719 8.29688L10.2422 10.0469C10.543 10.2656 10.9531 10.1836 11.1719 9.88281C11.3633 9.58203 11.2812 9.17188 10.9805 8.95312L8.65625 7.42188V4.03125C8.65625 3.67578 8.35547 3.375 8 3.375C7.61719 3.375 7.34375 3.67578 7.34375 4.03125Z" fill="#050505"/>
+                 </Svg>
+                    )}
         <Text style={[styles.cardText, styles.bold, index % 2 === 1 ? { color: 'white' } : null]}> {task.temporellement}</Text>
+        </View>
         <Text style={[styles.cardText, styles.bold, index % 2 === 1 ? { color: 'white' } : null]}> {task.Point} 
           {index % 2 === 0 ? (
             <Svg width="17" height="16" viewBox="0 0 17 16" fill="none">
@@ -121,7 +132,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
       <ScrollView horizontal={false}>
         {recompenses.map((Recompense, index) => (
           <View key={index} >
-            <View style={[styles.cardVerticale, index % 2 === 0 ? { backgroundColor: '#F4B322' } : { backgroundColor: '#0A0700' }]}>
+            <View style={[styles.cardVerticale, index % 2 === 0 ? { backgroundColor: '#FFFF' } : { backgroundColor: '#EB4651' }]}>
               <Text style={[styles.cardText, styles.bold, styles.center,index % 2 === 1 ? { color: 'white' } : null]}> {Recompense.Recompense}</Text>
               <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? {   color: 'white' } : null]}> {Recompense.Name}</Text>
               <View style={[styles.row, styles.bottom]}>
@@ -161,6 +172,17 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingTop: 80,
   },
+  row: {
+    display: 'flex',
+    flexDirection: 'row', // Added flexDirection: 'row'
+    alignItems: 'center',
+    justifyContent: 'center', // Use justifyContent for horizontal alignment
+  },
+  iconTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 15,
+  },
   cardText: {
     marginBottom: 2,
     fontSize: 16
@@ -196,14 +218,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  row: {
-    flexDirection: 'row',
-  },
+  // row: {
+  //   flexDirection: 'row',
+  // },
   appName: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 40,
     backgroundColor: 'white',
+    color:'#EB4651',
   },
 });
 

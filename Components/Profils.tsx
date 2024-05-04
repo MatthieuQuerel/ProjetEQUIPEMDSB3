@@ -17,7 +17,7 @@ const Profil: React.FC<ProfilProps> = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (params) {
-            fetch(`http://192.168.1.116:8082/Profils/${params.User}`)
+            fetch(`http://10.54.90.21:8082/Profils/${params.User}`)
                 .then(reponse => {
                     if (!reponse.ok) {
                         throw new Error('Échec de la requête');
@@ -32,7 +32,7 @@ const Profil: React.FC<ProfilProps> = () => {
                     console.log("Impossible d'afficher les informations !!");
                 });
 
-            fetch(`http://192.168.1.116:8082/ProfilsEnfant/${params.User}`)
+            fetch(`http://10.54.90.21:8082/ProfilsEnfant/${params.User}`)
                 .then(reponse => {
                     if (!reponse.ok) {
                         throw new Error('Échec de la requête');
@@ -81,17 +81,17 @@ const Profil: React.FC<ProfilProps> = () => {
                    
                     ProfilsEnfant.map((Profils, index) => (
                         <TouchableOpacity key={`enfant_touchable_${index}`} onPress={() =>navigate(`/Compte/${params.User}/CompteParent/Profils/AjouterEnfant/${Profils.IdPlayer}`)}> 
-                            <View key={`enfant_${index}`} style={[styles.card, styles.childCard,index % 2 === 0 ? { backgroundColor: '#F4B322' } : { backgroundColor: '#0A0700' }]}>
+                            <View key={`enfant_${index}`} style={[styles.card, styles.childCard,index % 2 === 0 ? { backgroundColor: '#F4B322' } : { backgroundColor: '#EB4651' }]}>
                                 <View style={{marginHorizontal: 40,  alignItems: 'center', justifyContent: 'center' }}>
                                     {index % 2 === 0 ? (
                                         <Svg width="50" height="50" viewBox="0 0 40 40" fill="none">
-                                            <Rect width="40" height="40" rx="20" fill="#050505"/>
-                                            <Path d="M20 19.75C18.0234 19.75 16.2188 18.7188 15.2305 17C14.2422 15.3242 14.2422 13.2188 15.2305 11.5C16.2188 9.82422 18.0234 8.75 20 8.75C21.9336 8.75 23.7383 9.82422 24.7266 11.5C25.7148 13.2188 25.7148 15.3242 24.7266 17C23.7383 18.7188 21.9336 19.75 20 19.75ZM18.0234 21.8125H21.9336C26.1875 21.8125 29.625 25.25 29.625 29.5039C29.625 30.1914 29.0234 30.75 28.3359 30.75H11.6211C10.9336 30.75 10.375 30.1914 10.375 29.5039C10.375 25.25 13.7695 21.8125 18.0234 21.8125Z" fill="#F4B322"/>
+                                            <Rect width="40" height="40" rx="20" fill="#FFFFFF"/>
+                                            <Path d="M20 19.75C18.0234 19.75 16.2188 18.7188 15.2305 17C14.2422 15.3242 14.2422 13.2188 15.2305 11.5C16.2188 9.82422 18.0234 8.75 20 8.75C21.9336 8.75 23.7383 9.82422 24.7266 11.5C25.7148 13.2188 25.7148 15.3242 24.7266 17C23.7383 18.7188 21.9336 19.75 20 19.75ZM18.0234 21.8125H21.9336C26.1875 21.8125 29.625 25.25 29.625 29.5039C29.625 30.1914 29.0234 30.75 28.3359 30.75H11.6211C10.9336 30.75 10.375 30.1914 10.375 29.5039C10.375 25.25 13.7695 21.8125 18.0234 21.8125Z" fill="#EB4651"/>
                                         </Svg>
                                     ) : (
                                         <Svg width="50" height="50" viewBox="0 0 40 40" fill="none">
                                         <Rect x="0.5" y="0.5" width="40" height="40" rx="20" fill="#F4B322" stroke="#0A0700"/>
-                                        <Path d="M58.3816 66.9981L58.3816 66.998L58.3789 66.9933C54.7661 60.8377 54.7625 53.0966 58.3803 46.7724C62.0003 40.6063 68.6064 36.6594 75.8334 36.6594C82.8971 36.6594 89.5042 40.6043 93.1255 46.7724C96.743 53.0966 96.7394 60.8377 93.1269 66.9933L93.1269 66.9933L93.1242 66.998C89.5066 73.32 82.904 77.1087 75.8334 77.1087C68.5994 77.1087 61.998 73.3181 58.3816 66.9981ZM68.4213 85.8804H83.0844C98.7581 85.8804 111.427 98.6072 111.427 114.363C111.427 116.658 109.415 118.558 107.093 118.558H44.4125C42.1128 118.558 40.2396 116.679 40.2396 114.363C40.2396 98.6035 52.7512 85.8804 68.4213 85.8804Z" fill="#0A0700" stroke="#0A0700"/>
+                                        <Path d="M20 19.75C18.0234 19.75 16.2188 18.7188 15.2305 17C14.2422 15.3242 14.2422 13.2188 15.2305 11.5C16.2188 9.82422 18.0234 8.75 20 8.75C21.9336 8.75 23.7383 9.82422 24.7266 11.5C25.7148 13.2188 25.7148 15.3242 24.7266 17C23.7383 18.7188 21.9336 19.75 20 19.75ZM18.0234 21.8125H21.9336C26.1875 21.8125 29.625 25.25 29.625 29.5039C29.625 30.1914 29.0234 30.75 28.3359 30.75H11.6211C10.9336 30.75 10.375 30.1914 10.375 29.5039C10.375 25.25 13.7695 21.8125 18.0234 21.8125Z" fill="#FFFFFF"/>
                                     </Svg>
                                     )}
                                     <Text style={[styles.bold, { color: index % 1 === 0 ? '#FFFFFF' : '#050505' }]}>{Profils.Name}</Text>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
         paddingTop: 80,
     },
     line: {
-        borderBottomColor: 'black',
+        borderBottomColor: 'EB4651',
         borderBottomWidth: 1,
         width: '50%',
         alignSelf: 'center',

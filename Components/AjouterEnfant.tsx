@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ScrollView ,Button} from 'react-native';
 import { useNavigate, useParams } from 'react-router-dom'; // Corrected import
 import Svg, { Path, Rect } from 'react-native-svg';
+import { LinearGradient } from 'expo-linear-gradient';
+
 interface AjouterEnfantProps {}
 
 const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
@@ -19,7 +21,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
     const fetchData = async () => {
       try {
         if (idCard > 0) {
-          const response = await fetch(`http://192.168.1.116:8082/AfficherModification/${idCard}`, {
+          const response = await fetch(`http://10.54.90.21:8082/AfficherModification/${idCard}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -119,7 +121,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
             id: idCard,
           }),
         };
-        const response = await fetch(`http://192.168.1.116:8082/SupresionEnfant/${params.User}`, options);
+        const response = await fetch(`http://10.54.90.21:8082/SupresionEnfant/${params.User}`, options);
         if (!response.ok) {
           console.log('Erreur dans la suppression');
         } else {
@@ -144,8 +146,10 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
         </Svg>
       </TouchableOpacity>
       
-        <TouchableOpacity style={styles.validerButton} onPress={SupEnregistrement}>
+        <TouchableOpacity style={styles.button} onPress={SupEnregistrement}>
+        <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
           <Text style={styles.buttonText}>Suprimer Enfant</Text>
+          </LinearGradient>  
         </TouchableOpacity>
         <Text style={styles.title}>Ajouter un enfant</Text>
         <TextInput
@@ -179,10 +183,14 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
     </TouchableOpacity>
   </View>
 </View>
-
-        <View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
+<TouchableOpacity style={styles.buttons} onPress={ChampsRemplie}>
+        <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
+          <Text style={styles.buttonText}>Valider</Text>
+          </LinearGradient>  
+        </TouchableOpacity>
+        {/* <View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
   <Button title="Valider" onPress={ChampsRemplie} color="black" />
-</View>
+</View> */}
 
       </View>
     </ScrollView>
@@ -192,7 +200,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 50,
   },
   icon: {
     marginRight: 10, // Ajoute de la marge à droite de l'icône
@@ -201,6 +209,13 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     width: 400,
+  },
+  linearGradient: {
+    width: 150,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
   },
   radioGroupContainer: {
     borderWidth: 1, // Épaisseur de la bordure
@@ -218,6 +233,26 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     marginBottom: 10, // Ajoute de la marge en bas de l'icône
+  },
+  button: {
+    width: 150,
+    height: 50,
+    backgroundColor: 'black', 
+    marginLeft: 200,
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 1, 
+    borderColor: '#FAB322', 
+  },
+  buttons: {
+    width: 150,
+    height: 50,
+    backgroundColor: 'black', 
+    marginLeft: 100,
+    alignItems: 'center',
+    borderRadius: 8,
+    borderWidth: 1, 
+    borderColor: '#FAB322', 
   },
   input: {
     height: 40,
@@ -267,7 +302,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: '#F4B322', // Couleur du texte du bouton
+    color: '#FFFF', // Couleur du texte du bouton
     fontSize: 16,
     fontWeight: 'bold',
   },
