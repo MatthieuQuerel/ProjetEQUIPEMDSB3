@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, ActivityIndicator,TouchableOpacity } from 'react-native';
 import { CardField, useStripe } from '@stripe/stripe-react-native';
 import { useParams,Link } from 'react-router-dom'; 
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Paiement = () => {
   const params = useParams();
@@ -106,9 +107,11 @@ const Paiement = () => {
       {errorMessage && <Text>{errorMessage}</Text>}
 
       <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
+      <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
   <Link to={`/Compte/${params.User}/CompteParent/Recompense/CGV`}>
     <Text style={[styles.createAccountText, { color: 'orange' }]}>CGV</Text>
   </Link>
+  </LinearGradient> 
 </TouchableOpacity>
     </View>
   );
@@ -133,6 +136,15 @@ const styles = StyleSheet.create({
       marginTop: 16,
       flexDirection: 'row', 
       alignItems: 'center', 
+    },
+    linearGradient: {
+      width: 200,
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+     
+      borderColor:'#F4B322',
     },
     createAccountText: {
       marginLeft: 5, 

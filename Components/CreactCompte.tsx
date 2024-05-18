@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-native';
+import { Link,useNavigate } from 'react-router-native';
 import { TextInput, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
 interface CreactCompteState {
@@ -16,7 +16,7 @@ const CreactCompte: React.FC = () => {
     email: '',
     password: '',
   });
-
+  const navigate = useNavigate();
   const handleChange = (fieldName: keyof CreactCompteState, value: string) => {
     setState((prevState) => ({ ...prevState, [fieldName]: value }));
   };
@@ -41,10 +41,11 @@ const CreactCompte: React.FC = () => {
           }),
         };
 
-        const response = await fetch('http://10.54.90.21:8082/CreactCompte', options);
+        const response = await fetch('http://192.168.1.116:8082/CreactCompte', options);
 
         if (response.ok) {
           console.log('Envoi avec succès');
+          navigate(`/Compte/${email}`);
         } else {
           console.log('Erreur envoi form data');
         }

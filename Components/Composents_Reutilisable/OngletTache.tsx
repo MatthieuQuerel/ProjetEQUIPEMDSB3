@@ -3,23 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import ButtonNav from "./Button";
 import { useParams } from 'react-router-native';
 import Svg, { Path, Rect } from 'react-native-svg';
+import { SvgXml } from 'react-native-svg';
 
 interface OngletTacheProps {};
 
 const OngletTache: React.FC<OngletTacheProps> = () => {
   const [activeTab, setActiveTab] = useState<number>(1);
-  const [tasks, setTasks] = useState<any[]>([]); // État pour stocker les tâches
+  const [tasks, setTasks] = useState<any[]>([]); 
   const params = useParams();
-  
-  useEffect(() => {
-    let Valide = 0; // Initialisez la variable Valide en dehors du bloc useEffect
+  const [errorTache, setErrorTache] = useState(""); 
 
-    if (activeTab === 2) { // Vérifiez la condition pour définir la valeur de Valide
+  useEffect(() => {
+    let Valide = 0; 
+
+    if (activeTab === 2) {
       Valide = 1;
     }
 
     if (params) {
-      fetch(`http://10.54.90.21:8082/Tache/${params.User}/${Valide}`, {
+      fetch(`http://192.168.1.116:8082/Tache/${params.User}/${Valide}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -34,12 +36,13 @@ const OngletTache: React.FC<OngletTacheProps> = () => {
       })
       .then(data => {
         // Mettez à jour l'état avec les données reçues ici
-        console.log("Données reçues :", data);
+       
         setTasks(data); // Met à jour l'état avec les données reçues
       })
       .catch(err => {
         console.log(err);
         console.log("Impossible d'afficher les informations !!");
+        setErrorTache("Impossible d'afficher les informations !!");
       });
     }
   }, [activeTab, params]);
@@ -63,12 +66,18 @@ const OngletTache: React.FC<OngletTacheProps> = () => {
         {activeTab === 1 && (
           <React.Fragment>
             <Text style={[styles.titre]}>Tâches actives</Text>
+            {errorTache && <Text style={{ color: 'red' }}>{errorTache}</Text>}
             <ScrollView style={styles.scrollView}>
               {tasks.map((task, index) => (
                 <View key={index} style={[styles.card, { backgroundColor: index % 2 === 0 ? '#FFFF' : '#EB4651' }]}>
+                  <View style={styles.row}>
+                 <SvgXml xml={task.ImageSVG} />
+                 <View style={{marginLeft: 10}}>
                 <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>{task.Rulse}</Text>
-                <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Description}</Text>
-                <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>Tâche pour: {task.Name}</Text>
+               <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>{task.Description}</Text>
+               <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>Tâche pour: {task.Name}</Text>
+              </View>
+              </View>
                 <View style={styles.row}>
                 <View style={styles.iconTextContainer}>
                   {index % 2 === 1 ? (
@@ -107,12 +116,18 @@ const OngletTache: React.FC<OngletTacheProps> = () => {
         {activeTab === 2 && (
           <React.Fragment>
             <Text  style={[styles.titre]}>Tâches terminées</Text>
+            {errorTache && <Text style={{ color: 'red' }}>{errorTache}</Text>}
             <ScrollView style={styles.scrollView}>
               {tasks.map((task, index) => (
                 <View key={index} style={[styles.card, { backgroundColor: index % 2 === 0 ? '#FFFF' : '#EB4651' }]}>
-                <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Rulse}</Text>
-                <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Description}</Text>
-                <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>Tâche pour: {task.Name}</Text>
+                   <View style={styles.row}>
+    <SvgXml xml={task.ImageSVG} />
+    <View style={{marginLeft: 10}}>
+      <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>{task.Rulse}</Text>
+      <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>{task.Description}</Text>
+      <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}>Tâche pour: {task.Name}</Text>
+    </View>
+  </View>
                 <View style={styles.row}>
                   <View style={styles.iconTextContainer}>
                   {index % 2 === 1 ? (

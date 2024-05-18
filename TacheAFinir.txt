@@ -1,3 +1,4 @@
-1 revoir les bTN style flèche pour retour et pas bleu sur payement, 
+1 revoir les bTN style flèche pour retour et pas bleu sur payement,  1
 2 dans notification ajouter récompense.
+3 deployer sur serveur
 3 icons ajouter 

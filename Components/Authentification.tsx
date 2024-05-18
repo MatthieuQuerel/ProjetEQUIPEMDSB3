@@ -48,33 +48,20 @@ const Authentification: React.FC<IProps> = () => {
           }),
         };
 
-        const response = await fetch('http://10.54.90.21:8082/Authentification', options);
+        const response = await fetch('http://192.168.1.116:8082/Authentification', options);
 
         if (response.ok) {
           const responseData = await response.json();
           if(responseData !=""){
-            console.log('Réponse du serveur:', responseData);
+            
             console.log('Réponse du serveur:', responseData.Mail);
             console.log('Réponse du serveur:', responseData.Password);
-            // if(await comparer(password,responseData.Password)){
-            //   navigate(`/Compte/${email}`);
-            // }else{
-            //   alert('Password incorrect');
-            // }
-            // toast.show({
-            //   type: 'success',
-            //   text1: "Authentification Réussi", // Le message à afficher
-            // });
+            
             navigate(`/Compte/${email}`);
           }else{
             console.log('Réponse du serveur NULLLLL:', responseData);
             setError('Erreur lors de la tentative de connexion. Veuillez réessayer.');
-            // toast.show({
-            //   type: 'error',
-            //   text1: responseData?.error?.message, // Le message à afficher
-            // });
-      
-          
+           
           }
          
         } else {
@@ -130,7 +117,7 @@ const Authentification: React.FC<IProps> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FAFA',
+    backgroundColor: '#FFFF',
     flex: 2,
     justifyContent: 'center',
      alignItems: 'center',   

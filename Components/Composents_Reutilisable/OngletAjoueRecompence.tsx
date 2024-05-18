@@ -205,14 +205,9 @@ paramchamps.Description = paramchamps.Description.replace(/\+/g, ' ');
 
   const ChampsRemplie = async () => {
     try {
-     
-console.log(AjoutModifier)
       if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== '') {
         let URL;
         let method;
-console.log("AjoueModification : "+AjoueModification)
-console.log("ModificationValue : "+ModificationValue)
-console.log("IDCard : "+IDCard)
 
 if (ModificationValue === '1' && IDCard !== '') {
   URL = `http://192.168.1.116:8082/Modification/${User}`;
@@ -222,10 +217,6 @@ if (ModificationValue === '1' && IDCard !== '') {
   URL = `http://192.168.1.116:8082/AjoutRecompense/${User}`;
   method = 'POST';
 }
-console.log(URL);
-
-
-
 const response = await fetch(URL, {
   method: method,
   headers: {
@@ -246,7 +237,7 @@ const response = await fetch(URL, {
 
 if (response.ok) {
   console.log('Envoi avec succès');
-  
+  navigate(`/Compte/${param.User}/CompteParent/Recompense`);
 } else {
   console.log('Erreur envoi form data');
   // setState(prevState => ({ ...prevState, NomRecompense: '', Point: 0, Abonement: 0, NameEnfant: '', Description: '' }));
@@ -337,7 +328,6 @@ value={state.Description}
   placeholder="Récompense"
   style={pickerSelectStyles}
 />
-
 
 {state.NomRecompense !== '' && (
   

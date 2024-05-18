@@ -17,7 +17,7 @@ const Profil: React.FC<ProfilProps> = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (params) {
-            fetch(`http://10.54.90.21:8082/Profils/${params.User}`)
+            fetch(`http://192.168.1.116:8082/Profils/${params.User}`)
                 .then(reponse => {
                     if (!reponse.ok) {
                         throw new Error('Échec de la requête');
@@ -32,7 +32,7 @@ const Profil: React.FC<ProfilProps> = () => {
                     console.log("Impossible d'afficher les informations !!");
                 });
 
-            fetch(`http://10.54.90.21:8082/ProfilsEnfant/${params.User}`)
+            fetch(`http://192.168.1.116:8082/ProfilsEnfant/${params.User}`)
                 .then(reponse => {
                     if (!reponse.ok) {
                         throw new Error('Échec de la requête');

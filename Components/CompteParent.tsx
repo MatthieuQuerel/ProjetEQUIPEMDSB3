@@ -4,13 +4,14 @@ import Svg, { Path } from 'react-native-svg';
 import { useParams, useNavigate } from 'react-router-native';
 import BarHead from './Composents_Reutilisable/BarHead';
 import NavBar from './Composents_Reutilisable/Nav';
+import { SvgXml } from 'react-native-svg';
 
 interface Task {
   Rulse: string;
   Name: string;
   temporellement: string;
   Point: string;
-  
+  ImageSVG:string;
 }
 
 interface Recompense {
@@ -28,7 +29,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
   const navigate = useNavigate();
   const User = params.User;
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [recompenses, setRecompenses] = useState<Recompense[]>([]); // Utiliser le bon type pour les récompenses
+  const [recompenses, setRecompenses] = useState<Recompense[]>([]); 
   const [errorTache, setErrorTache] = useState(""); 
   const [errorRecompense, setErrors] = useState("");
 
@@ -36,7 +37,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     const fetchData = async () => {
       try {
         console.log(User);
-        const response = await fetch(`http://10.54.90.21:8082/ToutTache/${User}`, {
+        const response = await fetch(`http://192.168.1.116:8082/ToutTache/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +58,7 @@ const CompteParent: React.FC<CompteParentState> = () => {
     }
     const fetchRecompenses = async () => {
       try {
-        const response = await fetch(`http://10.54.90.21:8082/ToutRecompense/${User}`, {
+        const response = await fetch(`http://192.168.1.116:8082/ToutRecompense/${User}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json',
@@ -92,8 +93,13 @@ const CompteParent: React.FC<CompteParentState> = () => {
       <ScrollView horizontal={true}>
   {tasks.map((task, index) => (
     <View key={index} style={[styles.cardHorizontale, { backgroundColor: index % 2 === 0 ? '#FFFF' : '#EB4651' }]}>
-      <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Rulse}</Text>
-      <Text style={[styles.cardText, styles.bold, styles.center, index % 2 === 1 ? { color: 'white' } : null]}> {task.Name}</Text>
+       <View style={styles.row}>
+    <SvgXml xml={task.ImageSVG} />
+    <View style={styles.textContainer}>
+      <Text style={[styles.cardText, styles.bold, index % 2 === 1 ? { color: 'white' } : null]}> {task.Rulse}</Text>
+      <Text style={[styles.cardText, styles.bold, { textAlign: 'center' }, index % 2 === 1 ? { color: 'white' } : null]}> {task.Name}</Text>
+    </View>
+  </View>
       <View style={[styles.row, styles.bottom]}>
       <View style={styles.iconTextContainer}>
       {index % 2 === 1 ? (
@@ -174,9 +180,9 @@ const styles = StyleSheet.create({
   },
   row: {
     display: 'flex',
-    flexDirection: 'row', // Added flexDirection: 'row'
+    flexDirection: 'row', 
     alignItems: 'center',
-    justifyContent: 'center', // Use justifyContent for horizontal alignment
+    justifyContent: 'center', 
   },
   iconTextContainer: {
     flexDirection: 'row',
@@ -196,6 +202,9 @@ const styles = StyleSheet.create({
     width: 250, 
     marginHorizontal: 5,
    
+  },
+  textContainer: { 
+    marginLeft: 19, 
   },
   cardVerticale: {
     borderRadius: 10,

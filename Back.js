@@ -141,7 +141,7 @@ app.post("/Authentification", async (req, res) => {
     const connection = await conection(); // Utilisez la fonction conection au lieu de conection
     const mail = req.params.mail; 
     const ValideTable = req.params.Valide;
-    const query = `SELECT Nombre_de_point,Description,type, Valider, Rulse, player.Name FROM rulse INNER JOIN user ON rulse.IdUser = user.idUser INNER JOIN player ON rulse.IdPlayer = player.idPlayer WHERE user.Mail = '${mail}'and Valider =${ValideTable}  `
+    const query = `SELECT Nombre_de_point,Description,type, Valider, Rulse,image.SVG, player.Name FROM rulse INNER JOIN image ON rulse.IDIcons = image.imageID INNER JOIN user ON rulse.IdUser = user.idUser INNER JOIN player ON rulse.IdPlayer = player.idPlayer WHERE user.Mail = '${mail}'and Valider =${ValideTable}`
     try {
       const data = await executerequete(connection, query);
       const rulse = data.map((rulse) => ({
@@ -151,9 +151,8 @@ app.post("/Authentification", async (req, res) => {
         Valider: rulse.Valider,
         Rulse: rulse.Rulse,
         Name: rulse.Name,
-        //IMG: rulse.IMG,
+        ImageSVG: rulse.SVG,
       }));
-      
       return res.json(rulse);
   
     } catch (error) {
@@ -161,12 +160,7 @@ app.post("/Authentification", async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' })
     }
   })
-
-
-
-
   /////////////////////////////////////Ajouter Tache ///////////////////////////////
-/////////////a revoire
 app.post("/TacheAjoue", async (req, res) => {
   
   const connection = await conection(); // Utilisez la fonction conection définie
@@ -217,7 +211,7 @@ app.get("/ToutTache/:mail",async(req,res) => {
     const Mail = req.params.mail;
     const connection = await conection();
     
-    const query = `SELECT player.Name, Rulse, type, Nombre_de_point FROM rulse INNER JOIN player ON rulse.IdPlayer = player.idPlayer INNER JOIN user ON rulse.IdUser= user.idUser WHERE user.Mail = '${Mail}' ORDER BY rulse.DateCreation LIMIT 5`
+    const query = `SELECT player.Name, Rulse, type, Nombre_de_point,image.SVG FROM rulse INNER JOIN player ON rulse.IdPlayer = player.idPlayer INNER JOIN image ON rulse.IDIcons = image.imageID INNER JOIN user ON rulse.IdUser= user.idUser WHERE user.Mail = '${Mail}' ORDER BY rulse.DateCreation LIMIT 5`
     try {
  
     const data =   await executerequete(connection,query)
@@ -227,8 +221,9 @@ const RulseAcceil = data.map((RulseAcceil) => ({
   temporellement:RulseAcceil.type === 1 ? "souvent" : "une fois",
   Rulse: RulseAcceil.Rulse,
   Name: RulseAcceil.Name,
+  ImageSVG: RulseAcceil.SVG,
 }));
-console.log(RulseAcceil)
+
 return res.json(RulseAcceil);
   }catch(error){
     console.log("Error d'envoie erreur ")
@@ -439,20 +434,14 @@ app.get("/AbonnerPrenium/:mail", async(req, res) => {
   console.log(Mail)
   const query = `SELECT Abonner FROM user WHERE Mail = '${Mail}'`
 const queryRecompense = `SELECT player.Name ,player.idPlayer, recompense.Point, recompense.Recompense, recompenseAdmin.RecompenseAdmin ,recompenseAdmin.idRecompenseAdmin, recompenseAdmin.description,Recompense.idRecompense FROM recompense  INNER JOIN user ON recompense.users = user.idUser   INNER JOIN player ON recompense.Players = player.idPlayer  LEFT JOIN recompenseAdmin ON recompense.RecompenseAdmin = recompenseAdmin.idRecompenseAdmin WHERE user.Mail = '${Mail}' AND recompense.Abonnement = 1`
-//const queryRecompense = `SELECT player.Name,Recompense.Point,RecompenseAdmin.RecompenseAdmin,RecompenseAdmin.description FROM recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  INNER JOIN RecompenseAdmin ON RecompenseAdmin.idRecompenseAdmin =Recompense.idRecompense  WHERE user.Mail = '${Mail}'`// AND Abonnement = '1'
-
   try {
     const data = await executerequete(connection, query);
     const abonnement = data.map((Abonement) => ({
       Abonner: Abonement.Abonner,
-    }));
-   
+    })); 
     if (abonnement[0].Abonner === 0) {
-      
       return res.json(abonnement);
-      
   } else {
-   
       const data = await executerequete(connection, queryRecompense);
       const RecompensePrenium = data.map((recompensePrenium) => ({
           Name: recompensePrenium.Name,
@@ -461,8 +450,7 @@ const queryRecompense = `SELECT player.Name ,player.idPlayer, recompense.Point, 
           Description: recompensePrenium.description,
           IdRecompense: recompensePrenium.idRecompense,
           IdPlayer: recompensePrenium.idPlayer,
-          IdRecompenseAdmin: recompensePrenium.idRecompenseAdmin,
-          
+          IdRecompenseAdmin: recompensePrenium.idRecompenseAdmin,    
       }));
       return res.json(RecompensePrenium);
   }
@@ -477,8 +465,7 @@ app.get("/AbonnerStandard/:mail", async(req, res) => {
   const connection = await conection(); // Utilisez la fonction conection au lieu de conection
   const Mail = req.params.mail;
   
-  const query = `SELECT player.Name,player.idPlayer,Recompense.Point,Recompense.Description,Recompense.Recompense,Recompense.idRecompense FROM Recompense INNER JOIN user ON Recompense.users = user.idUser  INNER JOIN player ON Recompense.Players = player.idPlayer  WHERE user.Mail = '${Mail}' AND Abonnement = '0'`
-
+  const query = `SELECT player.Name,player.idPlayer,Recompense.Point,Recompense.Description,Recompense.Recompense,Recompense.idRecompense FROM Recompense INNER JOIN user ON Recompense.users = user.idUser INNER JOIN player ON Recompense.Players = player.idPlayer  WHERE user.Mail = '${Mail}' AND Abonnement = '0'`
   try {
     const data = await executerequete(connection, query);
     const RecompenseStandard = data.map((recompenseStandard) => ({
@@ -487,13 +474,9 @@ app.get("/AbonnerStandard/:mail", async(req, res) => {
       Description: recompenseStandard.Description,
       Recompense: recompenseStandard.Recompense,
       IdRecompense: recompenseStandard.idRecompense,
-      IdPlayer: recompenseStandard.idPlayer,
-      
+      IdPlayer: recompenseStandard.idPlayer, 
     }));
-  
        return res.json(RecompenseStandard);
-    
-     
 
   } catch (error) {
     console.log("req imposible", error)
@@ -636,15 +619,25 @@ app.get("/playerRecompenseNotification/:mail", async(req, res) => {
   const connection = await conection(); // Utilisez la fonction conection au lieu de conection
   const Mail = req.params.mail;
   
-  const queryRecompenseNotification = `SELECT p.Name AS PlayerName, p.Point AS PlayerPoints, r.idRecompense, r.Recompense, r.Point AS RewardPoints, r.DateCreation AS RewardCreationDate FROM user u INNER JOIN player p ON u.idUser = p.IdUser INNER JOIN recompense r ON p.idPlayer = r.Players WHERE u.Mail = '${Mail}'  AND p.Point > r.Point ORDER BY r.DateCreation LIMIT 4;`
+  const queryRecompenseNotification = `SELECT p.Name AS PlayerName, p.Point AS PlayerPoints, r.idRecompense, IFNULL(r.Recompense, ra.RecompenseAdmin) AS Recompense,  r.Point AS RewardPoints, r.DateCreation AS RewardCreationDate FROM user u INNER JOIN player p ON u.idUser = p.IdUser  INNER JOIN recompense r ON p.idPlayer = r.Players LEFT JOIN recompenseadmin ra ON r.RecompenseAdmin = ra.idRecompenseAdmin WHERE u.Mail = '${Mail}'  AND p.Point > r.Point ORDER BY r.DateCreation LIMIT 4;`
 
   try {
     const data = await executerequete(connection, queryRecompenseNotification);
-    const RecompenseNotification = data.map((Recompensenotification) => ({
-      PlayerName: Recompensenotification.PlayerName,
-      PlayerPoints: Recompensenotification.PlayerPoints,
-      Recompense : Recompensenotification.Recompense ,
-    }));
+const RecompenseNotification = data.map((Recompensenotification) => {
+  const rewardDate = new Date(Recompensenotification.RewardCreationDate);
+  const day = rewardDate.getDate().toString().padStart(2, '0'); 
+  const month = (rewardDate.getMonth() + 1).toString().padStart(2, '0'); 
+  const year = rewardDate.getFullYear(); 
+  const formattedDate = `${day}-${month}-${year}`;
+
+  return {
+    PlayerName: Recompensenotification.PlayerName,
+    PlayerPoints: Recompensenotification.PlayerPoints,
+    Recompense: Recompensenotification.Recompense,
+    RewardCreationDate: formattedDate, 
+  };
+});
+
   
        return res.json(RecompenseNotification);
     
@@ -716,9 +709,27 @@ app.post('/Abonnement/:mail', async (req, res) => {
 //   }
 // });
 
+//////////////////////////////////////////////////statistique///////////////////////////////////////////////////////////////////////////
 
-
-
+app.get("/stat/:mail", async(req, res) => {
+  const connection = await conection(); // Utilisez la fonction conection au lieu de conection
+  const Mail = req.params.mail;
+  
+ const queryStatistique = `SELECT player.Point, player.Name,player.idPlayer FROM player left JOIN user ON player.IdUser = user.idUser  WHERE user.Mail = '${Mail}' GROUP BY player.Point, player.Name;`
+  try {
+    const data = await executerequete(connection, queryStatistique);
+    const Statistique = data.map((statistique) => ({
+      point: statistique.Point,
+      name: statistique.Name,
+      IdPlayer : statistique.idPlayer ,
+    }));
+    console.log(Statistique+ "dans le back")
+       return res.json(Statistique);
+  } catch (error) {
+    console.log("req imposible", error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
 /////////////////////////////////////////////Partie Enfant ///////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////Afficher enfant ////////////////////////////////////////////////////////////////////////

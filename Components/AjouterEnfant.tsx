@@ -21,7 +21,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
     const fetchData = async () => {
       try {
         if (idCard > 0) {
-          const response = await fetch(`http://10.54.90.21:8082/AfficherModification/${idCard}`, {
+          const response = await fetch(`http://192.168.1.116:8082/AfficherModification/${idCard}`, {
             method: "GET",
             headers: {
               'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
             id: idCard,
           }),
         };
-        const response = await fetch(`http://10.54.90.21:8082/SupresionEnfant/${params.User}`, options);
+        const response = await fetch(`http://192.168.1.116:8082/SupresionEnfant/${params.User}`, options);
         if (!response.ok) {
           console.log('Erreur dans la suppression');
         } else {

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import {useNavigate} from 'react-router-native';
+import { useParams } from 'react-router-dom'; 
+import { SvgXml } from 'react-native-svg';
 interface OngletAjouterTacheProps {
   user?: string;
 }
@@ -27,6 +29,8 @@ interface OngletAjouterTacheState {
 const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
  
   const [activeTab, setActiveTab] = useState<number>(1);
+  const navigate = useNavigate();
+  const  param = useParams()
   // const [selectedValue, setSelectedValue] = useState<string>('');
   // const [selectedPenaliter, setSelectedValue] = useState<string>('');
   const [selectedNameValue, setSelectedNameValue] = useState<string>('');
@@ -51,7 +55,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://10.54.90.21:8082/Avatar/${user}`, {
+      fetch(`http://192.168.1.116:8082/Avatar/${user}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -118,12 +122,14 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
           }), 
         };
         
-        const response = await fetch(`http://10.54.90.21:8082/TacheAjoue`, options);///Compte/${user}/CompteParent/Tache
+        const response = await fetch(`http://192.168.1.116:8082/TacheAjoue`, options);///Compte/${user}/CompteParent/Tache
 
 const responseData = await response.json();
         if (responseData !="") {
           
           console.log('Envoi avec succès');
+          navigate(`/Compte/${param.User}/CompteParent/Tache`);
+
           // state.NomTache=''
           // state.point=0
           // state.Penalitee=''
@@ -162,6 +168,7 @@ const responseData = await response.json();
         {activeTab === 1 && (
           //////////la patie onglet 1
           <React.Fragment>
+            <ScrollView style={styles.scrollView}>
              <Text style={styles.sectionTitle}>tache</Text>
             <TextInput
   style={styles.input}
@@ -227,12 +234,13 @@ const responseData = await response.json();
                     <Text style={styles.buttonText}>Valider</Text>
                  </LinearGradient>
       </TouchableOpacity>
-
+      </ScrollView>
           </React.Fragment>
         )}
         {activeTab === 2 && (
           ///////////////la patie ongle 2
           <React.Fragment>
+            <ScrollView style={styles.scrollView}>
               <Text style={styles.sectionTitle}>tache</Text>
             <TextInput
   style={styles.input}
@@ -300,6 +308,7 @@ const responseData = await response.json();
 {/* <View style={[styles.buttonContainer, { justifyContent: 'center', alignItems: 'center' }]}>
   <Button title="Valider" onPress={ChampsRemplie} color="black" />
 </View> */}
+</ScrollView>
              </React.Fragment>
         )}
       </View>
@@ -324,6 +333,9 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     padding: 10,
+  },
+  scrollView: {
+    maxHeight: 300, // Définissez une hauteur maximale pour la vue défilante
   },
   buttonContainer: {
    

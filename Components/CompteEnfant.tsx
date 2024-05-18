@@ -18,7 +18,7 @@ const CompteEnfant: React.FC = () => {
     const fetchData = async () => {
       try {
         if (User !== '') {
-          const response = await fetch(`http://10.54.90.21:8082/Afficherenfant/${User}`);
+          const response = await fetch(`http://192.168.1.116:8082/Afficherenfant/${User}`);
           if (!response.ok) {
             throw new Error('Échec de la requête pour récupérer les données de récompense');
           }

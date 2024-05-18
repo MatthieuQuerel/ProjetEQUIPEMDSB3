@@ -19,7 +19,7 @@ const OngletRecompense = () => {
     const [activeTab, setActiveTab] = useState<number>(1);
     const [tasks, setTasks] = useState<any[]>([]); // État pour stocker les tâches
     const [abonnement, setAbonnement] = useState<number | null>(null); // État pour stocker l'abonnement
-   
+    const [errorRecompense, setErrors] = useState("");
 
     const changeTab = (tabNumber: number) => {
         setActiveTab(tabNumber);
@@ -37,7 +37,7 @@ const OngletRecompense = () => {
         const fetchData = async () => {
             if (activeTab === 2 && params) {
                 try {
-                    const response = await fetch(`http://10.54.90.21:8082/AbonnerPrenium/${params.User}`, {
+                    const response = await fetch(`http://192.168.1.116:8082/AbonnerPrenium/${params.User}`, {
                         method: "GET",
                         headers: {
                             'Content-Type': 'application/json',
@@ -53,11 +53,12 @@ const OngletRecompense = () => {
                     setTasks(data); // Met à jour l'état avec les données reçues
                 } catch (err) {
                     console.error(err);
+                    setErrors("Impossible d'afficher les informations !!");
                     console.log("Impossible d'afficher les informations !!");
                 }
             }else{
                 try {
-                const response = await fetch(`http://10.54.90.21:8082/AbonnerStandard/${params.User}`, {
+                const response = await fetch(`http://192.168.1.116:8082/AbonnerStandard/${params.User}`, {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json',
@@ -74,6 +75,7 @@ const OngletRecompense = () => {
                 
             } catch (err) {
                 console.error(err);
+                setErrors("Impossible d'afficher les informations !!");
                 console.log("Impossible d'afficher les informations !!");
             }
             }
@@ -147,11 +149,12 @@ const OngletRecompense = () => {
                
                     <React.Fragment>
                         {activeTab === 1 && (
+                          
                             <React.Fragment>
-     
+                            {errorRecompense && <Text style={{ color: 'red' }}>{errorRecompense}</Text>}
      
                                 <Text style={[styles.titre]} >partie standard</Text>
-                                <ScrollView horizontal={false}>
+                                <ScrollView horizontal={false} style={{ height: '50%' }}>
                                 {tasks.map((task, index) => (
   <TouchableOpacity key={index} onPress={() => navigate(buildLink(1, 0, task))}>
     <View style={[styles.card, { backgroundColor: index % 2 === 0 ? '#FFFFFF' : '#EB4651' }]}>
@@ -188,13 +191,14 @@ const OngletRecompense = () => {
                             </React.Fragment>
                         )}
                         
-                        {activeTab === 2 && (
-                              <React.Fragment>
+                        {activeTab === 2  && (
+                              <React.Fragment >
+                                {errorRecompense && <Text style={{ color: 'red' }}>{errorRecompense}</Text>}
                              <Text  style={[styles.titre]}>partie premiume</Text>
                                     {abonnement === 0 ? (
                                         <Payement />
                                     ) : (
-                                        <ScrollView horizontal={false}>
+                                        <ScrollView horizontal={false} style={{ height: '50%' }}>
                                         {tasks.map((task, index) => (
                                          <TouchableOpacity  onPress={() => navigate(buildLink(1,1,task))}>
                                         

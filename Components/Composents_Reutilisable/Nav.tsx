@@ -46,7 +46,7 @@ const NavBar: React.FC<IProps> = () => {
       <Text style={styles.buttonText}>Premium</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigate(`/Compte/${params.User}/CompteParent/Recompense`)}>
+      <TouchableOpacity style={styles.button} onPress={() => navigate(`/Compte/${params.User}/CompteParent/Stats`)}>
       <Svg width="19" height="19" viewBox="0 0 19 19" fill="none" >
       <Path d="M6.90002 2.625C6.90002 1.60938 7.72034 0.75 8.77502 0.75H10.025C11.0406 0.75 11.9 1.60938 11.9 2.625V16.375C11.9 17.4297 11.0406 18.25 10.025 18.25H8.77502C7.72034 18.25 6.90002 17.4297 6.90002 16.375V2.625ZM0.650024 10.125C0.650024 9.10938 1.47034 8.25 2.52502 8.25H3.77502C4.79065 8.25 5.65002 9.10938 5.65002 10.125V16.375C5.65002 17.4297 4.79065 18.25 3.77502 18.25H2.52502C1.47034 18.25 0.650024 17.4297 0.650024 16.375V10.125ZM15.025 3.25H16.275C17.2906 3.25 18.15 4.10938 18.15 5.125V16.375C18.15 17.4297 17.2906 18.25 16.275 18.25H15.025C13.9703 18.25 13.15 17.4297 13.15 16.375V5.125C13.15 4.10938 13.9703 3.25 15.025 3.25Z" fill="#4D4D4D"/>
       </Svg>

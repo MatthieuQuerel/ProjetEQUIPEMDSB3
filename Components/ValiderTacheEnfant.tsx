@@ -22,7 +22,7 @@ const ValiderTacheEnfant: React.FC = () => {
   const fetchData = async () => {
     try {
       if (User !== '' && id !== '') {
-        const response = await fetch(`http://10.54.90.21:8082/AfficherDeEnfant/${User}/${id}`);
+        const response = await fetch(`http://192.168.1.116:8082/AfficherDeEnfant/${User}/${id}`);
         if (!response.ok) {
           throw new Error('Échec de la requête pour récupérer les données de la tâche');
         }
@@ -40,7 +40,7 @@ const ValiderTacheEnfant: React.FC = () => {
 
   const ValiderTache = async (idRulse: number) => {
     try {
-      const response = await fetch(`http://10.54.90.21:8082/ValiderTache/${idRulse}`, {
+      const response = await fetch(`http://192.168.1.116:8082/ValiderTache/${idRulse}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

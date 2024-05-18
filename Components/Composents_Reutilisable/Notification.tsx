@@ -64,7 +64,7 @@ const Notification: React.FC<NotificationProps> = ({ isVisible, onDismiss, User 
           <Text style={styles.modalText}>Notifications :</Text>
           <ScrollView horizontal={false}>
             {playerRecompenseNotification.map((notification, index) => (
-              <TouchableOpacity key={index} onPress={dismissNotification}>
+              <TouchableOpacity key={index} onPress={dismissNotification} >
                 <View style={styles.card}>
                   <Text style={styles.cardText}>Player: {notification.PlayerName}</Text>
                   <Text style={styles.cardText}>Points: {notification.PlayerPoints}</Text>
