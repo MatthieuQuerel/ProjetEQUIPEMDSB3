@@ -154,7 +154,7 @@ const OngletRecompense = () => {
                             {errorRecompense && <Text style={{ color: 'red' }}>{errorRecompense}</Text>}
      
                                 <Text style={[styles.titre]} >partie standard</Text>
-                                <ScrollView horizontal={false} style={{ height: '50%' }}>
+                                <ScrollView horizontal={false} style={{ maxHeight: 500 }}>
                                 {tasks.map((task, index) => (
   <TouchableOpacity key={index} onPress={() => navigate(buildLink(1, 0, task))}>
     <View style={[styles.card, { backgroundColor: index % 2 === 0 ? '#FFFFFF' : '#EB4651' }]}>
@@ -198,7 +198,7 @@ const OngletRecompense = () => {
                                     {abonnement === 0 ? (
                                         <Payement />
                                     ) : (
-                                        <ScrollView horizontal={false} style={{ height: '50%' }}>
+                                        <ScrollView horizontal={false} style={{ maxHeight: 500}}>
                                         {tasks.map((task, index) => (
                                          <TouchableOpacity  onPress={() => navigate(buildLink(1,1,task))}>
                                         

@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     color:'#EB4651',
   },
   scrollView: {
-    maxHeight: 300, // Définissez une hauteur maximale pour la vue défilante
+    maxHeight: 500, // Définissez une hauteur maximale pour la vue défilante
   },
   card: {
     backgroundColor: 'white',

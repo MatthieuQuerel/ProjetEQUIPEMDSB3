@@ -166,7 +166,9 @@ app.post("/TacheAjoue", async (req, res) => {
   const connection = await conection(); // Utilisez la fonction conection définie
   const formData = req.body;
 
-  console.log(formData.IDPlayer)
+  console.log(formData.IDPlayer) 
+  
+
   const queryIdUser = `SELECT IdUser FROM player WHERE idPlayer = '${formData.IDPlayer}'`;
   console.log(queryIdUser)
   try {
@@ -186,7 +188,7 @@ app.post("/TacheAjoue", async (req, res) => {
       const idUser = dataIdUser[0].IdUser;
    
       // Construction de la requête SQL avec l'ID de l'utilisateur récupéré
-      const query = `INSERT INTO rulse (Rulse, Penalite, Nombre_de_point, Description, type, IdUser, IdPlayer, Valider, DateCreation) VALUES ('${formData.NomTache}', '${formData.Penalitee}', '${formData.point}', '${formData.Description}', '${formData.Recurence}', '${idUser}', '${formData.IDPlayer}', '0','${DateCreation}')`//,'${DateCreation}'//, DateCreation
+      const query = `INSERT INTO rulse (Rulse, Penalite, Nombre_de_point, Description, type, IdUser, IdPlayer, Valider, DateCreation,IDIcons) VALUES ('${formData.NomTache}', '${formData.Penalitee}', '${formData.point}', '${formData.Description}', '${formData.Recurence}', '${idUser}', '${formData.IDPlayer}', '0','${DateCreation}','${formData.IDimage}')`//,'${DateCreation}'//, DateCreation
                     
       console.log(query )
       // Exécution de la requête SQL pour ajouter la tâche
@@ -236,6 +238,29 @@ return res.json(RulseAcceil);
     const connection = await conection(); // Utilisez la fonction conection au lieu de conection
     const mail = req.params.mail;
     const query = `SELECT  player.Name,idPlayer,user.Mail FROM player INNER JOIN user ON player.IdUser = user.idUser WHERE user.Mail = '${mail}'`
+    try {
+      const data = await executerequete(connection, query);
+      console.log("back data");
+     console.log(data);
+      // const Players = data.map((Player) => ({ //petit bug donc je donne direct le data 
+      //   Nom: Player.Nom,
+      //   Name: Player.Name,
+      //   idPlayer: Player.idPlayer,
+      // }));
+      
+      
+      return res.json(data);
+  
+    } catch (error) {
+      console.log("req imposible", error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
+  })
+    /////////////////////////////////////Récupération icons ajouter Tache ////////////////////////////////
+  app.get("/Icons", async(req, res) => {
+    const connection = await conection(); 
+    const mail = req.params.mail;
+    const query = `SELECT imageID,Nom,SVG FROM image`
     try {
       const data = await executerequete(connection, query);
       console.log("back data");

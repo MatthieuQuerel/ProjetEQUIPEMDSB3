@@ -4,7 +4,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import { LinearGradient } from 'expo-linear-gradient';
 import {useNavigate} from 'react-router-native';
 import { useParams } from 'react-router-dom'; 
-import { SvgXml } from 'react-native-svg';
+
+
+
 interface OngletAjouterTacheProps {
   user?: string;
 }
@@ -14,6 +16,11 @@ interface PlayerData {
   Name: string;
   idPlayer: number;
 }
+interface IconsData {
+  SVG: string;
+  Nom: string;
+  imageID: number;
+}
 
 interface OngletAjouterTacheState {
   NomTache: string;
@@ -21,9 +28,12 @@ interface OngletAjouterTacheState {
   Penalitee: string;
   Description: string;
   NameEnfant: string;
+  Nom: string;
   idPlayer: number;
+  imageID: number;
   Recurence: number; // si 1 routine sinon non routine 
   playerData: PlayerData[];
+  IconsData: IconsData[];
 }
 
 const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
@@ -39,10 +49,13 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
     point: 0, // Utilisation d'une chaîne de caractères pour le champ numérique
     Penalitee: '', // Utilisation d'une chaîne de caractères pour la pénalité
     Description: '',
-    NameEnfant: '', // Nom de l'enfant sélectionné
+    NameEnfant: '', // Nom de l'enfant sélectionné  
+    Nom: '', // Nom de l'enfant sélectionné
     idPlayer: 0, // ID du joueur sélectionné
+    imageID: 0,
     Recurence: 0,
     playerData: [],
+    IconsData: [],
   });
 
   const changeTab = (tabNumber: number) => {
@@ -79,6 +92,34 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
           console.error('Erreur lors de la récupération des données :', error);
         });
     }
+
+    if (user) {
+      fetch(`http://192.168.1.116:8082/Icons`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Échec de la requête');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('OK', data);
+          setState((prevState: OngletAjouterTacheState) => ({
+            ...prevState,
+            IconsData: data,
+          }));
+          
+        })
+        .catch(error => {
+          console.error('Erreur lors de la récupération des données :', error);
+        });
+    }
+    
+
   }, [user]);
 
   const ChampsRemplie = async () => {
@@ -87,6 +128,7 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
       console.log( state.Penalitee);
       console.log( state.Description);
       console.log( state.NameEnfant);
+      console.log( state.Nom);
       console.log( state.Recurence);
       if(activeTab === 1){
         state.Recurence = 0
@@ -100,7 +142,8 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
       state.point !== 0 &&
       state.Penalitee !== '' &&
       state.Description !== '' &&
-      state.NameEnfant !== '' 
+      state.NameEnfant !== '' &&
+      state.Nom !== ''
      // state.Recurence !== 0
       // selectedValue !== '' &&
       // selectedNameValue !== ''
@@ -119,6 +162,8 @@ const OngletAjouterTache: React.FC<OngletAjouterTacheProps> = ({ user }) => {
             IDPlayer: state.NameEnfant,
             Description: state.Description,
             Recurence: state.Recurence,
+            IDimage:state.Nom,
+
           }), 
         };
         
@@ -139,7 +184,8 @@ const responseData = await response.json();
         } else {
           console.log('Erreur envoi form data');
           state.NomTache=''
-          state.point=0
+          state.point=0 
+          state.imageID=0
           state.Penalitee=''
           state.NameEnfant=''
           state.Description=''
@@ -198,6 +244,7 @@ const responseData = await response.json();
     { label: 'Difficile', value: 'Difficile' },
   ]}
   value={state.Penalitee}
+  placeholder="Penalitee"
   style={pickerSelectStyles}
 />
 
@@ -215,8 +262,22 @@ const responseData = await response.json();
     />
   </TouchableOpacity>
 </View>
+<View>
+  <Text style={styles.sectionTitle}>Choix Icons</Text>
+  <TouchableOpacity style={styles.card}>
+    <RNPickerSelect
+      onValueChange={(value) => handleChange('Nom', value)}
+      items={state.IconsData.map((item: IconsData) => ({
+        label: item.Nom,
+        value: item.imageID.toString(),
+      }))}
+      value={state.NameEnfant}
+      style={pickerSelectStyles}
+    />
+  </TouchableOpacity>
+</View>
 
-
+  
             <Text style={styles.sectionTitle}>Description</Text>
             <TextInput
               style={[styles.input, styles.descriptionInput]}
@@ -291,7 +352,20 @@ const responseData = await response.json();
     />
   </TouchableOpacity>
 </View>
-
+<View>
+  <Text style={styles.sectionTitle}>Choix Icons</Text>
+  <TouchableOpacity style={styles.card}>
+    <RNPickerSelect
+      onValueChange={(value) => handleChange('Nom', value)}
+      items={state.IconsData.map((item: IconsData) => ({
+        label: item.Nom,
+        value: item.imageID.toString(),
+      }))}
+      value={state.NameEnfant}
+      style={pickerSelectStyles}
+    />
+  </TouchableOpacity>
+</View>
             <Text style={styles.sectionTitle}>Description</Text>
             <TextInput
               style={[styles.input, styles.descriptionInput]}
@@ -335,7 +409,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   scrollView: {
-    maxHeight: 300, // Définissez une hauteur maximale pour la vue défilante
+    maxHeight: 690, // Définissez une hauteur maximale pour la vue défilante
   },
   buttonContainer: {
    
