@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-native';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-
+import { SvgXml } from 'react-native-svg';
 interface TaskData {
   Point: number;
   temporellement: string;
@@ -12,6 +12,7 @@ interface TaskData {
   Name: string;
   Description: string;
   idRulse: number;
+  ImageSVG:string;
 }
 
 const ValiderTacheEnfant: React.FC = () => {
@@ -71,8 +72,13 @@ const ValiderTacheEnfant: React.FC = () => {
       {tasks.map((task, index) => (
       <View key={index} style={[styles.card, index % 2 === 0 ? { backgroundColor: '#F4B322' } : { backgroundColor: '#FFFFFF' }]}>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>{task.Name}</Text>
+      <View style={styles.row}>
+      <SvgXml xml={task.ImageSVG} />
+      <View style={{marginLeft: 10}}>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Tache : {task.Rulse}</Text>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Points: {task.Point}</Text>
+      </View>
+      </View>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Fréquence: {task.temporellement}</Text>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Description: {task.Description}</Text>
       <TouchableOpacity onPress={() => ValiderTache(task.idRulse)} style={styles.button}>
@@ -104,6 +110,12 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       marginBottom: 20,
       marginTop: 33,
+    },
+    row: {
+      display: 'flex',
+      flexDirection: 'row', // Added flexDirection: 'row'
+      alignItems: 'center',
+      justifyContent: 'center', // Use justifyContent for horizontal alignment
     },
     linearGradient: {
       width: 200,

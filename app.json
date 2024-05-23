@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "Black"
-      }
+      },
+      "package": "com.mattmax28.ProjetB3AppMobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d8921bf9-c1c3-491e-9ae3-3ae5a49b4efc"
+      }
     }
   }
 }

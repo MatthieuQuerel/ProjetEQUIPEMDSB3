@@ -908,7 +908,7 @@ app.get("/AfficherDeEnfant/:mail/:id",async(req,res) => {
   const Id = req.params.id;
   const connection = await conection();
   
-  const query = `SELECT idRulse,player.Name, Rulse, type, Nombre_de_point FROM rulse INNER JOIN player ON rulse.IdPlayer = player.idPlayer INNER JOIN user ON rulse.IdUser= user.idUser WHERE user.Mail = '${Mail}' and player.idPlayer = '${Id}'and Valider = '0'  ORDER BY rulse.DateCreation`
+  const query = `SELECT idRulse,player.Name, Rulse, type,image.SVG, Nombre_de_point FROM rulse INNER JOIN image ON rulse.IDIcons = image.imageID INNER JOIN player ON rulse.IdPlayer = player.idPlayer INNER JOIN user ON rulse.IdUser= user.idUser WHERE user.Mail = '${Mail}' and player.idPlayer = '${Id}'and Valider = '0'  ORDER BY rulse.DateCreation`
   try {
 
   const data =   await executerequete(connection,query)
@@ -920,6 +920,7 @@ Rulse: RulseAcceil.Rulse,
 Name: RulseAcceil.Name,
 Description: RulseAcceil.Description,
 idRulse: RulseAcceil.idRulse,
+ImageSVG: RulseAcceil.SVG,
 }));
 console.log(RulseAcceil)
 return res.json(RulseAcceil);
