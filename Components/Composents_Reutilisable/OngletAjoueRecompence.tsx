@@ -288,7 +288,7 @@ if (response.ok) {
     </Svg>    
     </TouchableOpacity>
 
-<TouchableOpacity style={styles.supprimerButton} onPress={SupEnregistrement}>
+<TouchableOpacity  style={[styles.supprimerButton, ModificationValue === "0" && { opacity: 0 }]} disabled={ModificationValue === '0'} onPress={SupEnregistrement}>
 <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
   <Text style={styles.buttonText}>Supprimer Récompense</Text>
   </LinearGradient>

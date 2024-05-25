@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigate } from 'react-router-native';
+import { useNavigate ,useParams} from 'react-router-native';
 
 interface CGVProps {}
 
 const CGV: React.FC<CGVProps> = () => {
   const navigate = useNavigate();
-
+  const params = useParams();
+  const User = params.User;
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigate(`/`)}>
+      <TouchableOpacity onPress={() => navigate(`/Compte/${params.User}/CompteParent/Recompense`)}>
         <Text style={styles.buttonText}>Retour</Text>
       </TouchableOpacity>
       <Text style={styles.title}>Conditions Générales de Vente (CGV)</Text>

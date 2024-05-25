@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     navBarContainer: {
         flex: 1,
         justifyContent: 'flex-start',
-        paddingTop: 80,
+        paddingTop: 80, //230
     },
     line: {
         borderBottomColor: 'EB4651',

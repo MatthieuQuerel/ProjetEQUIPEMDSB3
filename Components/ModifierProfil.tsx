@@ -22,12 +22,13 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                console.log(params.User+"test 20000555")
                 const response = await fetch(`http://192.168.1.116:8082/Profils/${params.User}`);
                 if (!response.ok) {
                     throw new Error('Échec de la requête');
                 }
                 const data = await response.json();
-                console.log("Data fetched:", data); // Ajoutez ce log pour afficher les données récupérées
+                console.log("Data fetched ddd :", data); // Ajoutez ce log pour afficher les données récupérées
                 setProfilsParent(data);
                 // Set the initial values for mail and password if ProfilsParent has data
               
@@ -88,7 +89,7 @@ const ModifierProfil: React.FC<ModifierProfilProps> = () => {
                             </Svg>
 
                             <View style={styles.nameContainer}>
-                                <Text style={styles.bold}>{Profils.Lastname}</Text>
+                            <Text style={[styles.bold, { marginLeft: 10 }]}>{Profils.Lastname}</Text>
                                 <Text style={[styles.bold,styles.Nom]}>{Profils.name}</Text> 
                             </View>
                         </View>

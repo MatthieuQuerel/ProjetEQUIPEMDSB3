@@ -20,7 +20,8 @@ const OngletRecompense = () => {
     const [tasks, setTasks] = useState<any[]>([]); // État pour stocker les tâches
     const [abonnement, setAbonnement] = useState<number | null>(null); // État pour stocker l'abonnement
     const [errorRecompense, setErrors] = useState("");
-
+    
+    
     const changeTab = (tabNumber: number) => {
         setActiveTab(tabNumber);
     };
@@ -48,6 +49,12 @@ const OngletRecompense = () => {
                         return { }
                     }
                     const data = await response.json();   
+
+                    if (activeTab === 2 && abonnement === null) {
+                        setAbonnement(data.abonnement || 0); // Assuming `data.abonnement` indicates premium status
+                      }else {
+                        setAbonnement(data.abonnement || 1);
+                      }
                     // Mettez à jour l'état avec les données reçues ici
                     console.log("Données reçues :", data);
                     setTasks(data); // Met à jour l'état avec les données reçues
@@ -116,9 +123,11 @@ const OngletRecompense = () => {
         }
         if(Typeabonement === 1){
             paramLink.Abonnement = 1 ;
+          
         }else{
             console.log("Typeabonement est a 0")
             paramLink.Abonnement = 0 ;
+            
         }
         const queryParams = new URLSearchParams({
             AjoueModification: paramLink.AjoueModification.toString(),
@@ -132,7 +141,8 @@ const OngletRecompense = () => {
     };
    
     console.log(paramLink.Abonnement.toString())
-    console.log( paramLink.Abonnement)
+    console.log( paramLink.Abonnement) 
+    console.log( abonnement + "le test de la fen pour l abonement")
     console.log(buildLink(0,0,[]))
     return (
         <View>
@@ -195,7 +205,7 @@ const OngletRecompense = () => {
                               <React.Fragment >
                                 {errorRecompense && <Text style={{ color: 'red' }}>{errorRecompense}</Text>}
                              <Text  style={[styles.titre]}>partie premiume</Text>
-                                    {abonnement === 0 ? (
+                                    {abonnement === 0 ? ( 
                                         <Payement />
                                     ) : (
                                         <ScrollView horizontal={false} style={{ maxHeight: 500}}>
@@ -227,7 +237,7 @@ const OngletRecompense = () => {
                                         ))}
                                         </ScrollView>
                                     )}
-                                     <TouchableOpacity style={styles.button} onPress={() => console.log(`+ clicked`)}>
+                                     <TouchableOpacity style={[styles.button, abonnement === 0 && { opacity: 0 }]} disabled={abonnement === 0} onPress={() => console.log(`+ clicked`)}>
                 <Link to={buildLink(0,1,[])}>
                 <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
                     <Text style={styles.buttonText}>+</Text>

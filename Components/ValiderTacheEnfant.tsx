@@ -71,10 +71,11 @@ const ValiderTacheEnfant: React.FC = () => {
       <ScrollView horizontal={false}>
       {tasks.map((task, index) => (
       <View key={index} style={[styles.card, index % 2 === 0 ? { backgroundColor: '#F4B322' } : { backgroundColor: '#FFFFFF' }]}>
-      <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>{task.Name}</Text>
+     
       <View style={styles.row}>
       <SvgXml xml={task.ImageSVG} />
       <View style={{marginLeft: 10}}>
+      <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>{task.Name}</Text>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Tache : {task.Rulse}</Text>
       <Text style={[styles.text, index % 2 !== 0 && styles.whiteText]}>Points: {task.Point}</Text>
       </View>

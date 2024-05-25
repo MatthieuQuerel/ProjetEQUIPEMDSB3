@@ -787,11 +787,14 @@ app.get("/AfficherModification/:id", async (req, res) => {
 
 app.delete("/SupresionEnfant/:mail", async (req, res) => {
   try {
-    const Mail = req.params.mail;
+    
       const idToDelete = req.body.id; 
     const connection = await conection();
     if(idToDelete > 0){
-     
+      const querytache =`DELETE FROM rulse WHERE 	IdPlayer = '${idToDelete}'`;
+      await executerequete(connection, querytache);
+      const queryrecompense =`DELETE FROM recompense WHERE Players = '${idToDelete}'`;
+      await executerequete(connection, queryrecompense);
     const query =`DELETE FROM player WHERE idPlayer = '${idToDelete}'`;
     await executerequete(connection, query);
       return res.json({ message: "Supréssion player réussie"});

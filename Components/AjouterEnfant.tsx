@@ -146,7 +146,7 @@ const AjouterEnfant: React.FC<AjouterEnfantProps> = () => {
         </Svg>
       </TouchableOpacity>
       
-        <TouchableOpacity style={styles.button} onPress={SupEnregistrement}>
+        <TouchableOpacity style={[styles.button, idCard === 0 && { opacity: 0 }]}  disabled={idCard === 0} onPress={SupEnregistrement}>
         <LinearGradient colors={['#EB4651', '#F4B322']} style={styles.linearGradient}>
           <Text style={styles.buttonText}>Suprimer Enfant</Text>
           </LinearGradient>  

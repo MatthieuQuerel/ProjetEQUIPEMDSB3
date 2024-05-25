@@ -33,15 +33,15 @@ const executerequete=(Connection,reqete) =>{
     })
 }
 
-const Reqsql= 'SELECT  Valider,idRulse,type  FROM rulse '
+const Reqsql= 'SELECT  Valider,idRulse,type  FROM rulse WHERE rulse.type = 1 '
 const connection = await conection();
 try{
    const data = executerequete(connection,Reqsql)
    data.forEach(tache =>{
      const {idRulse,Valider,type}  = tache
     console.log(`Valider: ${Valider}, idRulse: ${idRulse}, type: ${type}`);
-     if(type = 1){
-        const ReqsqlModification = `UPDATE rulse SET rulse.type = 0 WHERE rulse.idRulse = '${idRulse}'`
+     if(type == 1 && Valider == 0){
+        const ReqsqlModification = `UPDATE rulse SET rulse.Valider = 0 WHERE rulse.idRulse = '${idRulse}'`
         const data = executerequete(connection,ReqsqlModification)
         if(data = '' || data == undefined){
             return json({ error: "Internal Server Error" });

@@ -26,8 +26,9 @@ interface CompteParentState {}
 
 const CompteParent: React.FC<CompteParentState> = () => {
   const params = useParams();
-  const navigate = useNavigate();
   const User = params.User;
+  const navigate = useNavigate();
+  
   const [tasks, setTasks] = useState<Task[]>([]);
   const [recompenses, setRecompenses] = useState<Recompense[]>([]); 
   const [errorTache, setErrorTache] = useState(""); 
