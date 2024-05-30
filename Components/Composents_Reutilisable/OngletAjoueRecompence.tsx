@@ -22,7 +22,7 @@ interface RecompenseDataAdmin {
   idRecompenseAdmin: number; 
 }
 
-interface OngletAjoueRecompenseState {
+interface OngletAjoueRecompenseState { // interface
   NomRecompense: string;
   Point: number;
   Description: string;
@@ -167,7 +167,7 @@ paramchamps.Description = paramchamps.Description.replace(/\+/g, ' ');
   };
 
 // affichage combo enfant et combo recompense 
-  useEffect(() => {
+  useEffect(() => { 
     const fetchData = async () => {
       try {
         console.log(User)
@@ -203,12 +203,12 @@ paramchamps.Description = paramchamps.Description.replace(/\+/g, ' ');
     fetchData();
   }, [User, state.Abonement]);
 
-  const ChampsRemplie = async () => {
+  const ChampsRemplie = async () => { // ajoue et récompense
     try {
       if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== '') {
         let URL;
         let method;
-
+// differente cas ajoue ou modif  selon var ModificationValue
 if (ModificationValue === '1' && IDCard !== '') {
   URL = `http://192.168.1.116:8082/Modification/${User}`;
   method = 'PUT';
@@ -251,7 +251,7 @@ if (response.ok) {
   };
 
   const SupEnregistrement = async () => {
-    try {
+    try { // supprimer récompense  grace à un ID
        //const IDs = 11// remetre ID
      if (state.NomRecompense !== '' && state.Point !== 0 && state.NameEnfant !== ''&& IDCard !== '' ) {
         const options = {
@@ -263,7 +263,7 @@ if (response.ok) {
             id: IDCard,                    
           }), 
         };
-        const response = await fetch(`http://192.168.1.116:8082/SupresionRecompense/${User}`, options);
+        const response = await fetch(`http://192.168.1.116:8082/SupresionRecompense/${User}`, options); // fetch
         if (!response.ok) {
           console.log('Erreur dans la suppression');              
         } else {
@@ -315,7 +315,7 @@ value={state.Description}
  onChangeText={text => handleChange('Description', text)}
  />
 </>
- )  : state.Abonement === 1 ? (    
+ )  : state.Abonement === 1 ? (     // des récompense et description prénium
   <>
 <Text style={styles.sectionTitle}>Recompense</Text>
 <RNPickerSelect
@@ -326,7 +326,7 @@ value={state.Description}
   }))}
   value={state.NomRecompense}
   placeholder="Récompense"
-  style={pickerSelectStyles}
+  style={pickerSelectStyles} 
 />
 
 {state.NomRecompense !== '' && (

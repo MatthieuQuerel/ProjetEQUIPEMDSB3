@@ -20,7 +20,7 @@ const Notification: React.FC<NotificationProps> = ({ isVisible, onDismiss, User 
   const fadeAnim = useState(new Animated.Value(0))[0];
   const [playerRecompenseNotification, setPlayerRecompenseNotification] = useState<PlayerRecompenseNotification[]>([]);
 
-  useEffect(() => {
+  useEffect(() => { // récupération des récompense 
     const fetchData = async () => {
       if (isVisible) {
         setModalVisible(true);
@@ -63,7 +63,7 @@ const Notification: React.FC<NotificationProps> = ({ isVisible, onDismiss, User 
         <View style={styles.modalContainer}>
           <Text style={styles.modalText}>Notifications :</Text>
           <ScrollView horizontal={false}>
-            {playerRecompenseNotification.map((notification, index) => (
+            {playerRecompenseNotification.map((notification, index) => ( // afficher le détail des notification
               <TouchableOpacity key={index} onPress={dismissNotification} >
                 <View style={styles.card}>
                   <Text style={styles.cardText}>Player: {notification.PlayerName}</Text>

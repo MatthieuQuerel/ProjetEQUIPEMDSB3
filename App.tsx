@@ -30,7 +30,7 @@ export default function App() {
    
       <StripeProvider publishableKey={STRIPE_PUBLISHABLE_KEY}>
         <NativeRouter>
-          <Routes>
+          <Routes> // route dans l'application
             <Route path="/" element={<Authentification />} />
             <Route path="/PolitiqueConfidentialite" element={<PolitiqueConfidentialite />} />
             <Route path="/CreactCompte" element={<CreactCompte />} />
@@ -60,6 +60,12 @@ export default function App() {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    //backgroundColor: 'black',
   },
 });
+
+
+// Ce code définit le composant principal de l'application, nommé App, qui utilise React Native pour créer une interface utilisateur mobile. Il importe plusieurs modules nécessaires, notamment des composants de base de react-native comme StyleSheet et View, ainsi que des composants de routage de react-router-native comme NativeRouter, Routes et Route pour gérer la navigation au sein de l'application. Plusieurs composants spécifiques sont importés pour être utilisés dans les différentes routes de l'application, tels que Compte, Authentification, CreactCompte, PolitiqueConfidentialite, CGV, CompteEnfant, CompteParent, AjouterTache, Profils, Prenium, ValiderTacheEnfant, Stats, ModifierProfil, Tache, OngleAjouterRecompense, AjouterEnfant et Erreur. Le module StripeProvider de @stripe/stripe-react-native est utilisé pour intégrer les fonctionnalités de paiement de Stripe, avec une clé publique Stripe spécifiée.
+
+// Le composant App commence par encapsuler l'ensemble de son contenu dans une vue (View) stylisée avec des styles définis dans styles.appContainer. Le StripeProvider est utilisé pour envelopper le NativeRouter, permettant ainsi l'utilisation des fonctionnalités de paiement Stripe dans toutes les routes définies. Les routes sont spécifiées à l'intérieur du composant Routes, chaque Route définissant un chemin d'accès spécifique et le composant à rendre pour ce chemin. Les chemins incluent la racine (/) qui rend le composant Authentification, ainsi que plusieurs chemins imbriqués pour gérer les comptes utilisateurs et les tâches. Les paramètres dynamiques des URL sont utilisés, par exemple, :User et :id, pour permettre la personnalisation des chemins basés sur l'utilisateur et d'autres identifiants.
+
+// Enfin, un composant Toast de react-native-toast-message est inclus pour afficher des notifications toast dans l'application. Les styles sont définis à l'aide de StyleSheet.create pour structurer et styliser le conteneur principal de l'application.

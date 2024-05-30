@@ -169,7 +169,7 @@ const Paiement = () => {
   const { confirmPayment } = useStripe();
   
 
-  const handleSubmit = async () => {
+  const handleSubmit = async () => { // ajout de prénium 
     setLoading(true);
     setErrorMessage(''); 
    

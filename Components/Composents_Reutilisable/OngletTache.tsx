@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row', // Added flexDirection: 'row'
     alignItems: 'center',
-    justifyContent: 'center', // Use justifyContent for horizontal alignment
+    justifyContent: 'center', // Use justifyContent pour aligner 
   },
   iconTextContainer: {
     flexDirection: 'row',
