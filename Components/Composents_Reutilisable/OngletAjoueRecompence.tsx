@@ -315,7 +315,7 @@ value={state.Description}
  onChangeText={text => handleChange('Description', text)}
  />
 </>
- )  : state.Abonement === 1 ? (     // des récompense et description prénium
+ )  : state.Abonement === 1 ? (   
   <>
 <Text style={styles.sectionTitle}>Recompense</Text>
 <RNPickerSelect

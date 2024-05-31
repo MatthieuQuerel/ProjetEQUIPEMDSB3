@@ -210,13 +210,13 @@ const styles = StyleSheet.create({
   cardVerticale: {
     borderRadius: 10,
    
-    padding: 4, // Ajustez le padding ici pour réduire la taille de la carte
+    padding: 4, 
     marginVertical: 5,
     borderWidth: 2,
     borderColor: '#F4B322',
     width: 400, 
     marginHorizontal: 5,
-    //height: 105, // Hauteur de la carte
+   
   },
   bold: {
     fontWeight: 'bold',
@@ -228,9 +228,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  // row: {
-  //   flexDirection: 'row',
-  // },
+
   appName: {
     fontSize: 24,
     fontWeight: 'bold',
