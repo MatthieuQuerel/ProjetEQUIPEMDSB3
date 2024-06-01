@@ -1,56 +1,65 @@
 import React, { useState } from 'react';
-import { Link,useNavigate } from 'react-router-native';
+import { Link, useNavigate } from 'react-router-native';
 import { TextInput, Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 
-interface CreactCompteState {
+interface CreateAccountState {
   username: string;
   lastName: string;
   email: string;
   password: string;
 }
 
-const CreactCompte: React.FC = () => {
-  const [state, setState] = useState<CreactCompteState>({
+const CreateAccount: React.FC = () => {
+  const [state, setState] = useState<CreateAccountState>({
     username: '',
     lastName: '',
     email: '',
     password: '',
   });
   const navigate = useNavigate();
-  const handleChange = (fieldName: keyof CreactCompteState, value: string) => {
+
+  const handleChange = (fieldName: keyof CreateAccountState, value: string) => {
     setState((prevState) => ({ ...prevState, [fieldName]: value }));
   };
 
-  const ChampsRemplie = async () => {
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async () => {
     const { username, lastName, email, password } = state;
 
-    if (username === '' || lastName === '' || email === '' || password === '') {
+    if (!username || !lastName || !email || !password) {
       Alert.alert("Tous les champs ne sont pas remplis");
+    } else if (!isValidEmail(email)) {
+      Alert.alert('Veuillez entrer une adresse email valide');
     } else {
       try {
-        const options = {
+        const response = await fetch('http://192.168.1.116:8082/CreactCompte', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json; charset=utf-8',
           },
           body: JSON.stringify({
-            name: state.username,
-            lastName: state.lastName,
-            Mail: state.email,
-            Password: state.password,
+            name: username,
+            LastName: lastName,
+            Mail: email,
+            Password: password,
           }),
-        };
-
-        const response = await fetch('http://192.168.1.116:8082/CreactCompte', options);
+        });
 
         if (response.ok) {
           console.log('Envoi avec succès');
           navigate(`/Compte/${email}`);
+        } else if (response.status === 409) {
+          Alert.alert('Erreur', 'Compte existant');
         } else {
-          console.log('Erreur envoi form data');
+          Alert.alert('Erreur', 'Erreur lors de la création du compte');
         }
       } catch (error) {
         console.error('Erreur requete :', error);
+        Alert.alert('Erreur', 'Erreur lors de la création du compte');
       }
     }
   };
@@ -94,8 +103,8 @@ const CreactCompte: React.FC = () => {
         placeholderTextColor="#F4B322"
         secureTextEntry
       />
-      <TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
-        <Text style={styles.ButtonText}>Inscription</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Text style={styles.buttonText}>Inscription</Text>
       </TouchableOpacity>
     </View>
   );
@@ -109,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 14,
   },
-  Button: {  
+  button: {  
     marginTop: 16,
     backgroundColor: '#EB4651', 
     borderRadius: 8, 
@@ -119,13 +128,11 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: 1, 
   },
-  
-  ButtonText: {
+  buttonText: {
     color: '#F4B322', 
     fontSize: 16,
     fontWeight: 'bold',
   },
-  
   title: {
     fontSize: 16,
     fontWeight: '800',
@@ -151,15 +158,6 @@ const styles = StyleSheet.create({
     padding: 8,
     width: '100%',
   },
-  signupButton: {
-    
-    color: 'orange',
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    marginTop: 20,
-  },
- 
   createAccountButton: {
     position: 'absolute',
     top: 20,
@@ -171,7 +169,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignItems: 'center', 
-    
     borderColor: 'white',
   },
   createAccountText: { 
@@ -179,7 +176,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreactCompte;
+export default CreateAccount;
+
 
 
 

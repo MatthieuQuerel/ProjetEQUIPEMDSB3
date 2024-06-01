@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput,Image, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Link, useNavigate } from 'react-router-native';
-// import { comparer } from './Composents_Reutilisable/Cryptage';
 
 interface AuthentificationState {
   email: string;
@@ -11,7 +10,6 @@ interface AuthentificationState {
 interface IProps {}
 
 const Authentification: React.FC<IProps> = () => {
- // const toast = useToast();
   const [state, setState] = useState<AuthentificationState>({
     email: '',
     password: '',
@@ -23,18 +21,18 @@ const Authentification: React.FC<IProps> = () => {
     setState((prevState) => ({ ...prevState, [fieldName]: value }));
   };
 
-  
+  const isValidEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const ChampsRemplie = async () => {
     const { email, password } = state;
 
     if (email === '' || password === '') {
-      
-      // toast.show({
-      //   type: 'error',
-      //   text1: 'Il manque des infos ', // Le message à afficher
-      // });
       alert('Il manque des infos');
+    } else if (!isValidEmail(email)) {
+      alert('Veuillez entrer une adresse email valide');
     } else {
       try {
         const options = {
@@ -52,18 +50,12 @@ const Authentification: React.FC<IProps> = () => {
 
         if (response.ok) {
           const responseData = await response.json();
-          if(responseData !=""){
-            
-            console.log('Réponse du serveur:', responseData.Mail);
-            console.log('Réponse du serveur:', responseData.Password);
-            
+          if (responseData !== '') {
             navigate(`/Compte/${email}`);
-          }else{
+          } else {
             console.log('Réponse du serveur NULLLLL:', responseData);
             setError('Erreur lors de la tentative de connexion. Veuillez réessayer.');
-           
           }
-         
         } else {
           console.log('Erreur lors de la requête :', response.status);
           setError('Une erreur s\'est produite. Veuillez réessayer.');
@@ -77,7 +69,7 @@ const Authentification: React.FC<IProps> = () => {
 
   return (
     <View style={styles.container}>
-      <Image  source={require('../assets/Logo.png')} style={styles.logo} />
+      <Image source={require('../assets/Logo.png')} style={styles.logo} />
       <Text style={styles.title}>Connexion au compte</Text>
       <TextInput
         style={styles.input}
@@ -96,21 +88,21 @@ const Authentification: React.FC<IProps> = () => {
         secureTextEntry
       />
 
-<TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
+      <TouchableOpacity style={styles.Button} onPress={ChampsRemplie}>
         <Text style={styles.ButtonText}>Connexion</Text>
       </TouchableOpacity>
       {error !== '' && <Text style={styles.errorText}>{error}</Text>}
       <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
-  <Text style={styles.text}>Vous n’avez pas de compte ? </Text>
-  <Link to="/CreactCompte">
-    <Text style={[styles.createAccountText, { color: 'orange' }]}>S'inscrire !</Text>
-  </Link>
-</TouchableOpacity>
-<TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
-  <Link to={"/PolitiqueConfidentialite"}>
-    <Text style={[styles.createAccountText, { color: 'orange' }]}>Politique de confidentialite</Text>
-  </Link>
-</TouchableOpacity>
+        <Text style={styles.text}>Vous n’avez pas de compte ? </Text>
+        <Link to="/CreactCompte">
+          <Text style={[styles.createAccountText, { color: 'orange' }]}>S'inscrire !</Text>
+        </Link>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.createAccountButton} onPress={() => console.log('Login pressed')}>
+        <Link to={"/PolitiqueConfidentialite"}>
+          <Text style={[styles.createAccountText, { color: 'orange' }]}>Politique de confidentialité</Text>
+        </Link>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -120,7 +112,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFF',
     flex: 2,
     justifyContent: 'center',
-     alignItems: 'center',   
+    alignItems: 'center',
     padding: 16,
   },
   logo: {
@@ -143,47 +135,44 @@ const styles = StyleSheet.create({
     fontFamily: 'sans-serif',
     lineHeight: 20,
     letterSpacing: 0,
-    textAlign: 'left', 
+    textAlign: 'left',
   },
   input: {
     height: 40,
     borderColor: '#F4B322',
     color: '#F4B322',
     borderWidth: 1,
-    borderRadius: 8, 
+    borderRadius: 8,
     marginBottom: 16,
     padding: 8,
     width: '100%',
-     
   },
-  Button: {  
+  Button: {
     marginTop: 16,
-    backgroundColor: '#EB4651', 
-    borderRadius: 8, 
-    paddingVertical: 8, 
-    paddingHorizontal: 10, 
-    alignItems: 'center', 
+    backgroundColor: '#EB4651',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    alignItems: 'center',
     borderColor: 'white',
-    borderWidth: 1, 
+    borderWidth: 1,
   },
-  
   ButtonText: {
-    color: '#F4B322', 
+    color: '#F4B322',
     fontSize: 16,
     fontWeight: 'bold',
   },
   createAccountButton: {
     marginTop: 16,
-    flexDirection: 'row', 
-    alignItems: 'center', 
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   createAccountText: {
-    marginLeft: 5, 
+    marginLeft: 5,
   },
   text: {
-    color: '#EB4651', 
+    color: '#EB4651',
   },
- 
 });
 
 export default Authentification;

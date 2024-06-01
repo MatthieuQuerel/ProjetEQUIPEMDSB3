@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const app = express();
+const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const port = 8082;
 
@@ -65,7 +66,7 @@ app.post('/CreactCompte', async (req, res) => {
     }
   
     const queryGet = `SELECT Mail,Password FROM user WHERE Mail = '${formData.Mail}' and Password = '${formData.Password}'`;
-    const queryPoste = `INSERT INTO user (name,Lastname,Mail,Password) VALUES ('${formData.name}','${formData.LastName}','${formData.Mail}','${formData.Password}')`;
+    const queryPoste = `INSERT INTO user (name,Lastname,Mail,Password,Abonner) VALUES ('${formData.name}','${formData.LastName}','${formData.Mail}','${formData.Password}','0')`;
     
     try {
       const data = await executerequete(connection, queryGet);
@@ -76,16 +77,50 @@ app.post('/CreactCompte', async (req, res) => {
         res.status(500).json({ message: 'compte exist ' });
       } else {
         await executerequete(connection, queryPoste);
-        res.status(500).json({ message: 'compte créé' });
+        console.log("compte créé")
+        res.status(201).json({ message: 'compte créé' });
       }
     } catch (err) {
       console.error('Erreur lors de la récupération des données :', err);
       res.status(500).json({ message: 'Erreur lors de la récupération des données' });
     }
   });
+  //       const salt = await bcrypt.genSalt(10); // cryptage 
+    //       const hashedPassword = await bcrypt.hash(formData.Password, salt);
+    //       const hashedMail = await bcrypt.hash(formData.Mail, salt);
+    //       const queryGet = `SELECT Mail,Password FROM user WHERE Mail = '${hashedMail}' and Password = '${hashedPassword}'`;     
+    // const queryPoste = `INSERT INTO user (name,Lastname,Mail,Password) VALUES ('${formData.name}','${formData.LastName}','${hashedMail}','${hashedPassword}')`; 
 /////////////////////////////////////authentification compte ////////////////////////////////
 
+// app.post("/Authentification", async (req, res) => {
+//   const formData = req.body;
+//   const { Mail, Password } = formData;
 
+//   try {
+//     // Utilisation de requêtes préparées pour éviter les injections SQL
+//     const [rows] = await connection.execute('SELECT Mail, Password FROM user WHERE Mail = ?', [Mail]);
+
+//     if (rows.length > 0) {
+//       const user = rows[0];
+//       // Vérification du mot de passe avec bcrypt
+//       const passwordMatch = bcrypt.compareSync(Password, user.Password);
+      
+//       if (passwordMatch) {
+//         // Les mots de passe correspondent, retour des informations utilisateur
+//         return res.json({ Mail: user.Mail });
+//       } else {
+//         // Les mots de passe ne correspondent pas
+//         return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+//       }
+//     } else {
+//       // Utilisateur non trouvé
+//       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+//     }
+//   } catch (err) {
+//     console.error('Erreur lors de la récupération des données :', err);
+//     res.status(500).json({ message: 'Erreur lors de la récupération des données' });
+//   }
+// });
 // // Fonction pour générer un token JWT
 // const generateToken = (userId) => {
 //   return jwt.sign({ userId }, 'your-secret-key', { expiresIn: '1h' }); // Vous pouvez modifier la durée de validité selon vos besoins
