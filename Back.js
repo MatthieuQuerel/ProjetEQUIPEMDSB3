@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
 const port = 8082;
 
-const stripe = require('stripe')('sk_test_51OQ4atDvUzqU5phQNI86jWKdxTAoXeaUeb7gpO5LyDxGF86JtpToYxON07CCP71qlP5wCcHohWnE36MhoBD8KZtL00j2wUiGl6');
+const stripe = require('stripe')('cléstripe');
 
 app.use(express.json());
 app.use(bodyParser.json());
